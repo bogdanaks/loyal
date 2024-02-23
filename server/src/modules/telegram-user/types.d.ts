@@ -1,0 +1,1 @@
+type BotType = "user" | "biz";

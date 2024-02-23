@@ -1,0 +1,10 @@
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0 0 22px 0;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 38px;
+}

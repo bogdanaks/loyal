@@ -1,0 +1,23 @@
+.fixed-cropper-wrapper {
+  &__header {
+    height: 80px;
+    flex-shrink: 0;
+    overflow: hidden;
+    margin: 0 auto;
+    z-index: 999;
+  }
+
+  &__content {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    overflow: visible;
+    margin-bottom: -40px;
+  }
+  &__navigation {
+    height: 80px;
+    flex-shrink: 0;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+}

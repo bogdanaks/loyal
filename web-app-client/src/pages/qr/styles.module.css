@@ -1,0 +1,16 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  padding-bottom: 120px;
+}
+
+.inner {
+  padding: 40px;
+  background: hsl(var(--primary-disabled));
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

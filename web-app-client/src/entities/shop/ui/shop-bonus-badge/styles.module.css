@@ -1,0 +1,37 @@
+.infoBonus {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 22px;
+  background-color: #f0f0f0;
+  border-radius: 12px;
+  padding: 0 4px;
+  width: fit-content;
+  position: relative;
+  padding-left: 24px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  background-color: hsl(var(--primary-disabled));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: 4px;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 12px;
+  width: fit-content;
+  letter-spacing: -0.32px;
+}

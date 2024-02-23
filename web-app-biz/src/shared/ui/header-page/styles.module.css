@@ -1,0 +1,26 @@
+.header {
+  position: sticky;
+  top: 0;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: #fafafa;
+  z-index: 2;
+}
+
+.backBtn {
+  width: 28px;
+  height: 28px;
+  transform: rotate(180deg);
+  position: absolute;
+  left: 0;
+}
+
+.title {
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px;
+}

@@ -1,0 +1,26 @@
+.wrapper {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.textArea {
+  margin-top: 12px;
+  border-radius: 4px;
+  border-color: #c7c7c7;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.btnSend {
+  width: 100%;
+  border-radius: 6px;
+  background: #636366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  color: #fff;
+  margin-top: 12px;
+  margin-bottom: 20px;
+}

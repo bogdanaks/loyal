@@ -1,0 +1,50 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.icon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoTitle {
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.infoCategory {
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  color: rgba(60, 60, 67, 0.6);
+  margin-bottom: auto;
+}
+
+.moreBtn {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  margin-left: auto;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+}
+
+.moreBtn svg {
+  fill: hsl(var(--primary));
+}
