@@ -4,7 +4,7 @@ import {
   Get,
   HttpException,
   HttpStatus,
-  Post,
+  Patch,
   Request,
   UseGuards,
 } from "@nestjs/common";
@@ -34,9 +34,11 @@ export class LoyalController {
       throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
     }
 
-    const findShop = await this.shopService.findOneShopBy({ owner_id: accId });
-    const loyal = await this.loyalService.findOneLoyalProgramBy({ shop_id: findShop.id });
-    return { data: loyal };
+    const findShop = await this.shopService.findOneShopBy({
+      where: { owner_id: accId },
+      relations: ["loyal_program"],
+    });
+    return { data: findShop.loyal_program };
   }
 
   @UseGuards(JwtAccountGuard)
@@ -52,22 +54,33 @@ export class LoyalController {
   }
 
   @UseGuards(JwtAccountGuard)
-  @Post()
+  @Patch()
   async updateLoyal(@Request() req: AuthRequest, @Body() data: UpdateLoyalDto) {
     const { accId } = req.user;
     if (!accId) {
       throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
     }
 
-    const shop = await this.shopService.findOneShopBy({ owner_id: accId });
+    const shop = await this.shopService.findOneShopBy({ where: { owner_id: accId } });
     if (!shop) {
       throw new HttpException("Shop not found", HttpStatus.NOT_FOUND);
     }
-    await this.loyalService.insertByShopId(shop.id, {
-      loyal_type_id: data.type,
-      percent_bonus: data.percent_bonus,
-      reg_bonus: data.reg_bonus,
-    });
+
+    if (!shop.loyal_program_id) {
+      const loyalProgram = await this.loyalService.insert({
+        loyal_type_id: data.type_id,
+        percent_bonus: data.percent_bonus,
+        reg_bonus: data.reg_bonus,
+      });
+      await this.shopService.updateShop(shop.id, { loyal_program_id: loyalProgram.id });
+    } else {
+      await this.loyalService.update(shop.loyal_program_id, {
+        loyal_type_id: data.type_id,
+        percent_bonus: data.percent_bonus,
+        reg_bonus: data.reg_bonus,
+      });
+    }
+
     return { data: "success" };
   }
 }

@@ -5,6 +5,7 @@ import { getMyShop } from "entities/shop/api"
 import { useShopStore } from "entities/shop/model/store"
 
 import { Button } from "shared/ui/button"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "shared/ui/sheet"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "shared/ui/tabs"
 
 import { BusinessSettingsContacts } from "./business-contacts"
@@ -37,7 +38,7 @@ export const BusinessSettings = () => {
     <div className="p-4">
       <div className="bg-background p-5 rounded-3xl flex">
         <Tabs
-          defaultValue="working_hours"
+          defaultValue="data"
           orientation="horizontal"
           className="flex flex-row gap-6 w-full min-h-[600px]"
         >
@@ -66,9 +67,19 @@ export const BusinessSettings = () => {
             >
               Контакная информация
             </TabsTrigger>
-            <Button type="button" variant="outline" className="mt-auto">
-              Предпросмотр магазина
-            </Button>
+            <Sheet>
+              <SheetTrigger className="mt-auto">
+                <Button type="button" variant="outline">
+                  Предпросмотр магазина
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="sm:max-w-md max-[500px]:w-[100vw] px-0">
+                <SheetHeader className="px-5">
+                  <SheetTitle>Предпросмотр магазина</SheetTitle>
+                </SheetHeader>
+                <div className="mt-6 h-full bg-red-200">Карточка магазина</div>
+              </SheetContent>
+            </Sheet>
           </TabsList>
           <TabsContent value="data" className="mt-0 w-full">
             <BusinessSettingsData shop={shop} />
@@ -77,10 +88,10 @@ export const BusinessSettings = () => {
             <BusinessSettingsWorkingHours shop={shop} />
           </TabsContent>
           <TabsContent value="photo" className="mt-0 w-full">
-            <BusinessSettingsPhotos />
+            <BusinessSettingsPhotos shop={shop} />
           </TabsContent>
           <TabsContent value="contacts" className="mt-0 w-full">
-            <BusinessSettingsContacts />
+            <BusinessSettingsContacts shop={shop} />
           </TabsContent>
         </Tabs>
       </div>

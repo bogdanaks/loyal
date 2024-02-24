@@ -94,9 +94,7 @@ export class AuthController {
 
     const match = await bcrypt.compare(data.password, bizAcc.password);
     if (match) {
-      const shop = await this.shopService.findOneShopBy({
-        owner_id: bizAcc.id,
-      });
+      const shop = await this.shopService.findOneShopBy({ where: { owner_id: bizAcc.id } });
 
       const jwtCode = this.jwtService.sign(
         { data: { accId: bizAcc.id, shopId: shop.id } },

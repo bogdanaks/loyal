@@ -8,7 +8,9 @@ interface Shop {
   description: name
   working_hours: WorkingHours
   photo: string
-  banners: string[]
+  banners: Record<string, string>
+  phone: string
+  address: string
   created_at: string
   updated_at: string
 }

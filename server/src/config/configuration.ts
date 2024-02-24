@@ -15,4 +15,5 @@ export default () => ({
     tgBotBusinessApiKey: process.env.TG_BOT_BUSINESS_API_KEY,
     tgHelperId: process.env.TG_HELPER_ID,
   },
+  staticPath: process.env.STATIC_PATH,
 });

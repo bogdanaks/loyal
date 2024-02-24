@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
@@ -17,21 +18,20 @@ import { ShopService } from "./shop.service";
 import { AuthRequest, JwtAccountGuard } from "../auth/jwt-account.guard";
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import * as sharp from "sharp";
-import {
-  UpdateClientBonusDto,
-  UpdateMyShopData,
-  UpdateMyShopDataDto,
-  UpdateMyShopDto,
-} from "./dto/shop.dto";
+import { UpdateClientBonusDto, UpdateMyShopDataDto } from "./dto/shop.dto";
 import { mkdirp } from "mkdirp";
 import * as fs from "node:fs";
 import { UserService } from "../user/user.service";
 import { TransactionService } from "../transaction/transaction.service";
+import { ConfigService } from "@nestjs/config";
+import { URLSearchParams } from "node:url";
+
 @Controller({ path: "shop" })
 export class ShopController {
   constructor(
     private readonly shopService: ShopService,
     private readonly userService: UserService,
+    private readonly configService: ConfigService<EnvironmentVariables>,
     private readonly transactionService: TransactionService
   ) {}
 
@@ -49,7 +49,7 @@ export class ShopController {
       throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
     }
 
-    const shop = await this.shopService.findOneShopBy({ owner_id: bizId });
+    const shop = await this.shopService.findOneShopBy({ where: { owner_id: bizId } });
     return { data: shop };
   }
 
@@ -66,7 +66,7 @@ export class ShopController {
   }
 
   @UseGuards(JwtAccountGuard)
-  @Patch("data")
+  @Patch()
   async updateShopData(@Request() req: AuthRequest, @Body() body: UpdateMyShopDataDto) {
     const { accId, shopId } = req.user;
     if (!accId || !shopId) {
@@ -78,88 +78,119 @@ export class ShopController {
     return { data: "success" };
   }
 
-  // @UseGuards(JwtAccountGuard)
-  // @UseInterceptors(
-  //   FileFieldsInterceptor([
-  //     { name: "photo", maxCount: 1 },
-  //     { name: "banners", maxCount: 4 },
-  //   ])
-  // )
-  // @Patch("my")
-  // async updateMyShop(
-  //   @Request() req: AuthRequest,
-  //   @UploadedFiles() files: { photo: Express.Multer.File[]; banners: Express.Multer.File[] },
-  //   @Body() body: UpdateMyShopDto
-  // ) {
-  //   const bodyData = JSON.parse(body.data as unknown as string) as UpdateMyShopData;
-  //   const { userId } = req.user;
-  //   if (!userId) {
-  //     throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
-  //   }
+  @UseGuards(JwtAccountGuard)
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: "photo", maxCount: 1 },
+      { name: "banners", maxCount: 4 },
+    ])
+  )
+  @Post("photos")
+  async updateMyShop(
+    @Request() req: AuthRequest,
+    @UploadedFiles() files: { photo: Express.Multer.File[]; banners: Express.Multer.File[] }
+  ) {
+    const { accId } = req.user;
+    if (!accId) {
+      throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
+    }
 
-  //   const findShop = await this.shopService.findOneShopBy({ owner_id: userId });
-  //   if (!findShop) {
-  //     throw new HttpException("Shop not found", HttpStatus.NOT_FOUND);
-  //   }
+    const findShop = await this.shopService.findOneShopBy({ where: { owner_id: accId } });
+    if (!findShop) {
+      throw new HttpException("Shop not found", HttpStatus.NOT_FOUND);
+    }
 
-  //   const dirName = `/Users/user/Desktop/my/loyal/server/static/shops/${findShop.id}`;
-  //   let photoUrl = "";
-  //   if (files.photo?.length) {
-  //     photoUrl = `${uuidv4()}.webp`;
+    const dirName = `${this.configService.get("staticPath")}/shops/${findShop.id}`;
+    let photoUrl = "";
+    if (files.photo?.length) {
+      photoUrl = `${uuidv4()}.webp`;
 
-  //     if (!fs.existsSync(dirName)) {
-  //       mkdirp.sync(dirName);
-  //     }
+      if (!fs.existsSync(dirName)) {
+        mkdirp.sync(dirName);
+      }
 
-  //     if (findShop.photo) {
-  //       fs.unlinkSync(`${dirName}/${findShop.photo}`);
-  //     }
+      if (findShop.photo) {
+        fs.unlinkSync(`${dirName}/${findShop.photo}`);
+      }
 
-  //     try {
-  //       await sharp(files.photo[0].buffer)
-  //         .resize(200, 200)
-  //         .webp({ quality: 100 })
-  //         .toFile(`${dirName}/${photoUrl}`);
-  //     } catch (e) {
-  //       throw new HttpException("Error", HttpStatus.INTERNAL_SERVER_ERROR);
-  //     }
-  //   }
+      try {
+        await sharp(files.photo[0].buffer)
+          .resize(200, 200)
+          .webp({ quality: 100 })
+          .toFile(`${dirName}/${photoUrl}`);
+      } catch (e) {
+        throw new HttpException("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
 
-  //   let bannersUrls = findShop.banners ?? [];
-  //   if (files.banners?.length) {
-  //     console.log("files.banners", files.banners);
+    const bannersUrls = findShop.banners ?? {};
+    if (files.banners?.length) {
+      if (!fs.existsSync(dirName)) {
+        mkdirp.sync(dirName);
+      }
 
-  //     if (!fs.existsSync(dirName)) {
-  //       mkdirp.sync(dirName);
-  //     }
+      console.log(files.banners);
+      for await (const banner of files.banners) {
+        const bannerData = new URLSearchParams(banner.originalname);
+        const bannerIndex = bannerData.get("index");
+        const bannerName = bannerData.get("name");
 
-  //     for await (const banner of files.banners) {
-  //       if (bannersUrls.includes(banner.originalname)) {
-  //         fs.unlinkSync(`${dirName}/${banner.originalname}`);
-  //         bannersUrls = bannersUrls.filter((url) => url !== banner.originalname);
-  //       }
+        if (bannerName !== "null") {
+          fs.unlinkSync(`${dirName}/${bannerName}`);
+        }
 
-  //       const bannerId = uuidv4();
-  //       try {
-  //         await sharp(banner.buffer)
-  //           .resize(400, 200)
-  //           .webp({ quality: 100 })
-  //           .toFile(`${dirName}/${bannerId}.webp`);
-  //         bannersUrls.push(`${bannerId}.webp`);
-  //       } catch (e) {
-  //         throw new HttpException("Error", HttpStatus.INTERNAL_SERVER_ERROR);
-  //       }
-  //     }
-  //   }
+        try {
+          const bannerId = uuidv4();
+          await sharp(banner.buffer)
+            .resize(400, 200, {
+              fit: "inside",
+            })
+            .webp({ quality: 100 })
+            .toFile(`${dirName}/${bannerId}.webp`);
+          bannersUrls[bannerIndex] = `${bannerId}.webp`;
+        } catch (e) {
+          throw new HttpException("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+      }
+    }
 
-  //   // await this.shopService.updateShop(findShop.id, {
-  //   //   ...bodyData,
-  //   //   photo: photoUrl.length ? photoUrl : findShop.photo,
-  //   //   banners: bannersUrls,
-  //   // });
-  //   const findUpdatedShop = await this.shopService.findOneShopBy({ id: findShop.id });
-  //   return { data: findUpdatedShop };
-  // }
+    await this.shopService.updateShop(findShop.id, {
+      photo: photoUrl.length ? photoUrl : findShop.photo,
+      banners: bannersUrls,
+    });
+    const findUpdatedShop = await this.shopService.findOneShopBy({ where: { id: findShop.id } });
+    return { data: findUpdatedShop };
+  }
+
+  @UseGuards(JwtAccountGuard)
+  @Delete("photos")
+  async deletePhoto(@Request() req: AuthRequest, @Query() query: { id: string }) {
+    if (!query.id) {
+      throw new HttpException("Photo not found", HttpStatus.NOT_FOUND);
+    }
+
+    const { accId } = req.user;
+    if (!accId) {
+      throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
+    }
+
+    const findShop = await this.shopService.findOneShopBy({ where: { owner_id: accId } });
+    if (!findShop) {
+      throw new HttpException("Shop not found", HttpStatus.NOT_FOUND);
+    }
+
+    const dirName = `${this.configService.get("staticPath")}/shops/${findShop.id}`;
+    fs.unlinkSync(`${dirName}/${query.id}`);
+
+    const bannersUrls = findShop.banners ?? {};
+    const findIndex = Object.keys(bannersUrls).find((key) => bannersUrls[key] === query.id);
+    delete bannersUrls[findIndex];
+    await this.shopService.updateShop(findShop.id, {
+      banners: bannersUrls,
+    });
+
+    return { data: "success" };
+  }
 
   @UseGuards(JwtAccountGuard)
   @Get("check-qr")
@@ -195,16 +226,17 @@ export class ShopController {
       throw new HttpException("User not found", HttpStatus.NOT_FOUND);
     }
 
-    const shop = await this.shopService.findOneShopBy({ owner_id: accId });
-    if (!shop) {
-      throw new HttpException("Shop not found", HttpStatus.NOT_FOUND);
+    const shop = await this.shopService.findOneShopBy({
+      where: { owner_id: accId },
+      relations: ["loyal_program"],
+    });
+    if (!shop || !shop.loyal_program) {
+      throw new HttpException("Shop or loyal not found", HttpStatus.NOT_FOUND);
     }
-
-    const loyalProgram = await this.shopService.findLoyalProgramBy({ shop_id: shop.id });
 
     try {
       await this.transactionService.create({
-        loyalty_program: loyalProgram,
+        loyalty_program: shop.loyal_program,
         user_id: user.id,
         shop_id: shop.id,
         ...data,

@@ -20,6 +20,7 @@ import styles from "./styles.module.css"
 import { Wrapper } from "./wrapper/wrapper"
 
 interface Props {
+  shopId: number
   image?: string
   onLoad: (image: Blob) => void
 }
@@ -59,7 +60,7 @@ const stencilSize: StencilSize<ExtendedSettings<FixedCropperSettings>> = ({ boun
   }
 }
 
-export const EditImage = ({ image, onLoad }: Props) => {
+export const EditImage = ({ shopId, image, onLoad }: Props) => {
   const [editorImage, setEditorImage] = useState<string | null>(null)
   const [imageState, setImageState] = useState<string | undefined>(undefined)
   const fileRef = useRef<HTMLInputElement>(null)
@@ -68,7 +69,7 @@ export const EditImage = ({ image, onLoad }: Props) => {
 
   useEffect(() => {
     if (image) {
-      // setImageState(`${config.apiDomain}/static/shops/${shopId}/${image}`);
+      setImageState(`${config.apiDomain}/static/shops/${shopId}/${image}`)
     }
   }, [image])
 
@@ -114,7 +115,7 @@ export const EditImage = ({ image, onLoad }: Props) => {
     <div className={styles.wrapper}>
       <div
         onClick={handleAvatarClick}
-        className="cursor-pointer min-w-20 min-h-20 w-20 h-20 rounded-xl bg-background flex items-center justify-center overflow-hidden border-[1px]"
+        className="cursor-pointer min-w-20 min-h-20 w-20 h-20 rounded-full bg-background flex items-center justify-center overflow-hidden border-[1px]"
       >
         {!isShowEditor && (
           <>

@@ -11,6 +11,7 @@ import { ShopType } from "../shop/shop-type.entity";
 import { AccountBusiness } from "../account/account-business.entity";
 import { WorkingHours } from "./interfaces";
 import { ShopStatus } from "./shop-status.entity";
+import { LoyalProgram } from "../loyal/loyal-program.entity";
 
 @Entity({ name: "shop" })
 export class Shop {
@@ -42,10 +43,17 @@ export class Shop {
     cascade: true,
   })
   @JoinColumn({ name: "status_id" })
-  status: AccountBusiness;
+  status: ShopStatus;
 
   @Column({ name: "status_id", type: "integer" })
   status_id: number;
+
+  @ManyToOne(() => LoyalProgram)
+  @JoinColumn({ name: "loyal_program_id" })
+  loyal_program: LoyalProgram;
+
+  @Column({ name: "loyal_program_id", type: "integer" })
+  loyal_program_id: number;
 
   @Column({ type: "character varying", length: 100 })
   short_description: string;
@@ -56,11 +64,17 @@ export class Shop {
   @Column({ type: "character varying", length: 100 })
   photo: string;
 
-  @Column({ type: "character varying", array: true, default: [] })
-  banners: string[];
+  @Column({ type: "jsonb" })
+  banners: Record<string, string>;
 
   @Column({ type: "jsonb" })
   working_hours: WorkingHours;
+
+  @Column({ type: "character varying", length: 10 })
+  phone: string;
+
+  @Column({ type: "character varying", length: 100 })
+  address: string;
 
   @CreateDateColumn({ type: "time with time zone" })
   created_at: Date;

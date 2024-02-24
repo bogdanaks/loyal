@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 
-import { getShopStatuses, getShopTypes, updateShopData } from "entities/shop/api"
+import { getShopStatuses, getShopTypes, updateShop } from "entities/shop/api"
 import { useShopStore } from "entities/shop/model/store"
 
 import { Button } from "shared/ui/button"
@@ -12,21 +12,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "shared/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "shared/ui/select"
 import { Textarea } from "shared/ui/textarea"
-
-// const workDaySchema = z.object({
-//   opening_time: z.string(),
-//   closing_time: z.string(),
-//   breaks_time_from: z.string(),
-//   breaks_time_to: z.string(),
-// })
-
-// const workDaySchemaWithDays = z.object({
-//   days: z.string().array(),
-//   opening_time: z.string(),
-//   closing_time: z.string(),
-//   breaks_time_from: z.string(),
-//   breaks_time_to: z.string(),
-// })
 
 const formSchema = z.object({
   title: z
@@ -43,18 +28,6 @@ const formSchema = z.object({
   }),
   short_description: z.string().max(40, { message: "Максимум 40 символов." }),
   description: z.string().max(100, { message: "Максимум 100 символов." }),
-  // working_hours: z.object(
-  //   {
-  //     common: workDaySchemaWithDays,
-  //     by_days: z.record(workDaySchema),
-  //   },
-  //   {
-  //     required_error: "Обязательное настройте график.",
-  //     invalid_type_error: "Обязательное настройте график.",
-  //   }
-  // ),
-  // photo: z.any(),
-  // banners: z.array(z.any()),
 })
 
 type FormFields = z.infer<typeof formSchema>
@@ -76,8 +49,8 @@ export const BusinessSettingsData = ({ shop }: Props) => {
     queryFn: getShopTypes,
     retry: 1,
   })
-  const { mutate } = useMutation<BaseResponse<Shop>, ResponseError, UpdateShopData, unknown>({
-    mutationFn: updateShopData,
+  const { mutate } = useMutation<BaseResponse<Shop>, ResponseError, Partial<Shop>, unknown>({
+    mutationFn: updateShop,
   })
 
   const form = useForm<FormFields>({

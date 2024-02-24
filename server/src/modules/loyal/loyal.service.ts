@@ -33,10 +33,8 @@ export class LoyalService {
     return await this.loyalProgramRepository.update(id, data);
   }
 
-  async insertByShopId(shop_id: number, data: Partial<LoyalProgram>) {
-    return await this.loyalProgramRepository.insert({
-      shop_id,
-      ...data,
-    });
+  async insert(data: Partial<LoyalProgram>) {
+    await this.loyalProgramRepository.insert(data);
+    return await this.loyalProgramRepository.findOneBy({ id: data.id });
   }
 }

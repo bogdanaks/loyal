@@ -8,29 +8,21 @@ import { z } from "zod"
 import { accountRegister } from "entities/auth/api"
 import { useAuthStore } from "entities/auth/model/store"
 
+import { config } from "shared/config"
 import { saveAuthToken } from "shared/libs/ls"
 import { Button } from "shared/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "shared/ui/form"
 import { Input } from "shared/ui/input"
 
-const formSchema = z
-  .object({
-    email: z
-      .string({ required_error: "Обязательное поле." })
-      .email({ message: "Некорректный email." }),
-    password: z
-      .string({ required_error: "Обязательное поле." })
-      .min(6, { message: "Минимум 6 символов." })
-      .max(100, { message: "Максимум 100 символов." }),
-    repeat_password: z
-      .string({ required_error: "Обязательное поле." })
-      .min(6, { message: "Минимум 6 символов." })
-      .max(100, { message: "Максимум 100 символов." }),
-  })
-  .refine((data) => data.password === data.repeat_password, {
-    message: "Пароль не совпадает",
-    path: ["repeat_password"],
-  })
+const formSchema = z.object({
+  email: z
+    .string({ required_error: "Обязательное поле." })
+    .email({ message: "Некорректный email." }),
+  password: z
+    .string({ required_error: "Обязательное поле." })
+    .min(6, { message: "Минимум 6 символов." })
+    .max(100, { message: "Максимум 100 символов." }),
+})
 
 type FormFields = z.infer<typeof formSchema>
 export const RegisterForm = () => {
@@ -52,7 +44,7 @@ export const RegisterForm = () => {
         if (searchParams.get("next")) {
           return navigate(searchParams.get("next")!)
         }
-        navigate("/dashboard")
+        navigate(config.initialPage)
       },
       onError: () => {
         toast.error("Ошибка. Обратитесь в поддержку")
@@ -82,19 +74,6 @@ export const RegisterForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Пароль</FormLabel>
-              <FormControl>
-                <Input placeholder="••••••" type="password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="repeat_password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Повторите пароль</FormLabel>
               <FormControl>
                 <Input placeholder="••••••" type="password" {...field} />
               </FormControl>

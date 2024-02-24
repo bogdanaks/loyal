@@ -19,4 +19,5 @@ interface EnvironmentVariables {
   port: number;
   database: DatabaseConfig;
   tg: TelegramConfig;
+  staticPath: string;
 }

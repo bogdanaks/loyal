@@ -2,7 +2,7 @@ import { IsNumber } from "class-validator";
 
 export class UpdateLoyalDto {
   @IsNumber()
-  type: number;
+  type_id: number;
 
   @IsNumber()
   percent_bonus: number;

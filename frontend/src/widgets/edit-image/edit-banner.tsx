@@ -1,4 +1,4 @@
-import { Camera } from "lucide-react"
+import { Camera, Trash } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import {
   DefaultSize,
@@ -20,8 +20,10 @@ import styles from "./styles.module.css"
 import { Wrapper } from "./wrapper/wrapper"
 
 interface Props {
+  shopId: number
   image?: string
   onLoad: (image: Blob) => void
+  onRemove: () => void
 }
 
 const file2Base64 = (file: File): Promise<string> => {
@@ -59,7 +61,7 @@ const stencilSize: StencilSize<ExtendedSettings<FixedCropperSettings>> = ({ boun
   }
 }
 
-export const EditBanner = ({ image, onLoad }: Props) => {
+export const EditBanner = ({ shopId, image, onLoad, onRemove }: Props) => {
   const [editorImage, setEditorImage] = useState<string | null>(null)
   const [imageState, setImageState] = useState<string | undefined>(undefined)
   const fileRef = useRef<HTMLInputElement>(null)
@@ -68,7 +70,7 @@ export const EditBanner = ({ image, onLoad }: Props) => {
 
   useEffect(() => {
     if (image?.length) {
-      // setImageState(`${config.apiDomain}/static/shops/${shopId}/${image}`)
+      setImageState(`${config.apiDomain}/static/shops/${shopId}/${image}`)
       setEditorImage(null)
     } else {
       setImageState(undefined)
@@ -123,7 +125,17 @@ export const EditBanner = ({ image, onLoad }: Props) => {
         {!isShowEditor && (
           <>
             {imageState?.length || editorImage ? (
-              <img src={editorImage || imageState} alt="Avatar" className={styles.bannerImg} />
+              <div className="flex w-full h-full overflow-hidden rounded-xl">
+                <img src={editorImage || imageState} alt="Avatar" className={styles.bannerImg} />
+                <Trash
+                  className="absolute right-2 top-2 cursor-pointer text-white hover:text-red-500"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onRemove()
+                  }}
+                  style={{ strokeWidth: 2 }}
+                />
+              </div>
             ) : (
               <Camera className="text-primary text-3xl" />
             )}
@@ -154,7 +166,7 @@ export const EditBanner = ({ image, onLoad }: Props) => {
               stencilProps={{
                 previewClassName: styles.preview,
                 overlayClassName: styles.overlayRect,
-                aspectRatio: 16 / 8,
+                aspectRatio: 16 / 9,
                 handlers: false,
                 lines: false,
                 movable: false,

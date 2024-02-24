@@ -8,8 +8,14 @@ const api = authApi.extend({
 
 export const getMyShop = async (): Promise<BaseResponse<Shop>> => await api.get("my").json()
 
-export const updateShopData = async (data: UpdateShopData): Promise<BaseResponse<Shop>> =>
-  await api.patch("data", { json: data }).json()
+export const updateShop = async (data: Partial<Shop>): Promise<BaseResponse<Shop>> =>
+  await api.patch("", { json: data }).json()
+
+export const uploadShopPhoto = async (data: FormData): Promise<BaseResponse<Shop>> =>
+  await api.post("photos", { body: data }).json()
+
+export const deleteShopPhoto = async (id: string): Promise<BaseResponse<Shop>> =>
+  await api.delete(`photos?id=${id}`).json()
 
 export const getShopTypes = async (): Promise<BaseResponse<ShopType[]>> =>
   await api.get("type").json()

@@ -7,22 +7,12 @@ import {
   ManyToOne,
   JoinColumn,
 } from "typeorm";
-import { Shop } from "../shop/shop.entity";
 import { LoyalType } from "./loyal-type.entity";
 
 @Entity({ name: "loyal_program" })
 export class LoyalProgram {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @ManyToOne(() => Shop, {
-    cascade: true,
-  })
-  @JoinColumn({ name: "shop_id" })
-  shop: Shop;
-
-  @Column({ name: "shop_id", type: "integer" })
-  shop_id: number;
 
   @ManyToOne(() => LoyalType, (loyalType) => loyalType.id, {
     cascade: true,

@@ -8,6 +8,7 @@ import { z } from "zod"
 import { accountLogin } from "entities/auth/api"
 import { useAuthStore } from "entities/auth/model/store"
 
+import { config } from "shared/config"
 import { saveAuthToken } from "shared/libs/ls"
 import { Button } from "shared/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "shared/ui/form"
@@ -43,7 +44,7 @@ export const LoginForm = () => {
         if (searchParams.get("next")) {
           return navigate(searchParams.get("next")!)
         }
-        navigate("/dashboard")
+        navigate(config.initialPage)
       },
       onError: (error) => {
         if (error?.payload?.message === "Incorrect data") {
