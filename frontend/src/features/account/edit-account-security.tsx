@@ -6,9 +6,9 @@ import * as z from "zod"
 
 import { updatePassword } from "entities/account/api"
 
-import { Button } from "shared/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "shared/ui/form"
 import { Input } from "shared/ui/input"
+import { TelegramButton } from "shared/ui/telegram-button"
 
 const formSchema = z
   .object({
@@ -108,9 +108,14 @@ export const EditAccountSecurity = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-fit mt-auto">
+        <TelegramButton
+          type="submit"
+          className="w-fit mt-auto"
+          text="Сохранить"
+          onClick={() => form.handleSubmit(onSubmit)()}
+        >
           Сохранить
-        </Button>
+        </TelegramButton>
       </form>
     </Form>
   )

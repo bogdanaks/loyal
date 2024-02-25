@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { AppWrapper } from "processes/app-wrapper.tsx"
+import { TelegramProvider } from "processes/telegram-provider.tsx"
 import React from "react"
 import ReactDOM from "react-dom/client"
 
@@ -12,9 +13,11 @@ const queryClient = new QueryClient()
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AppWrapper>
-        <App />
-      </AppWrapper>
+      <TelegramProvider>
+        <AppWrapper>
+          <App />
+        </AppWrapper>
+      </TelegramProvider>
     </QueryClientProvider>
   </React.StrictMode>
 )

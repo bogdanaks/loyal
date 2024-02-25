@@ -8,7 +8,6 @@ import * as z from "zod"
 
 import { getLoyalTypes, getMyLoyalProgram, updateLoyal } from "entities/loyal/api"
 
-import { Button } from "shared/ui/button"
 import {
   Form,
   FormControl,
@@ -19,6 +18,7 @@ import {
   FormMessage,
 } from "shared/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "shared/ui/select"
+import { TelegramButton } from "shared/ui/telegram-button"
 
 const formSchema = z.object({
   type_id: z.number(),
@@ -165,9 +165,14 @@ export const EditLoyal = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-fit mt-4">
+        <TelegramButton
+          type="submit"
+          className="w-fit mt-4"
+          text="Сохранить"
+          onClick={() => form.handleSubmit(onSubmit)()}
+        >
           Сохранить
-        </Button>
+        </TelegramButton>
       </form>
     </Form>
   )

@@ -2,18 +2,18 @@ import { useQuery } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { Navigate, Outlet } from "react-router-dom"
 
-import { useAppStore } from "app/store"
-
 import { useAuthStore } from "entities/auth/model/store"
 
 import { getAccount } from "entities/account/api"
 import { useAccountStore } from "entities/account/model/store"
+import { getMyShop } from "entities/shop/api"
+import { useShopStore } from "entities/shop/model/store"
 
 export const AuthProvider = () => {
   const isAuth = useAuthStore((state) => state.isAuth)
   const setIsAuth = useAuthStore((state) => state.setIsAuth)
   const setAccount = useAccountStore((state) => state.setAccount)
-  const setType = useAppStore((state) => state.setType)
+  const setShop = useShopStore((state) => state.setShop)
 
   const {
     error,
@@ -25,17 +25,23 @@ export const AuthProvider = () => {
     retry: false,
   })
 
-  useEffect(() => {
-    if (Telegram.WebApp.initData?.length) {
-      setType("telegram")
-    }
-  }, [])
+  const { data: myShop } = useQuery({
+    queryKey: ["my-shop"],
+    queryFn: getMyShop,
+    retry: 1,
+  })
 
   useEffect(() => {
     if (accountData) {
       setAccount(accountData.data)
     }
   }, [accountData])
+
+  useEffect(() => {
+    if (myShop) {
+      setShop(myShop.data)
+    }
+  }, [myShop])
 
   if (isLoading) {
     return <></>

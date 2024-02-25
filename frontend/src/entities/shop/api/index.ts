@@ -26,6 +26,9 @@ export const getShopStatuses = async (): Promise<BaseResponse<ShopStatus[]>> =>
 export const checkQrCode = async (payload: string): Promise<BaseResponse<UserAsClient>> =>
   await api.get(`check-qr?payload=${payload}`).json()
 
+export const checkPhone = async (payload: string): Promise<BaseResponse<UserAsClient>> =>
+  await api.get(`check-phone?payload=${payload}`).json()
+
 export const updateClientBonus = async (data: UpdateClientBonus): Promise<BaseResponse<string>> =>
   await api.post("client-bonus", { json: data }).json()
 

@@ -1,4 +1,7 @@
+import { LogOut } from "lucide-react"
 import { Link } from "react-router-dom"
+
+import { useAuthStore } from "entities/auth/model/store"
 
 import { useAccountStore } from "entities/account/model/store"
 
@@ -7,15 +10,22 @@ import GearIcon from "shared/assets/icons/gear.svg?react"
 import KaffeeIcon from "shared/assets/icons/kaffee.svg?react"
 import QuestionIcon from "shared/assets/icons/question.svg?react"
 import TicketIcon from "shared/assets/icons/ticket.svg?react"
+import { removeAuthToken } from "shared/libs/ls"
 
 import { Layout } from "widgets/ui"
 
 export const AccountMobile = () => {
   const account = useAccountStore((state) => state.account)
+  const setIsAuth = useAuthStore((store) => store.setIsAuth)
+
+  const handleExit = () => {
+    removeAuthToken()
+    setIsAuth(false)
+  }
 
   return (
     <Layout>
-      <div className="p-5">
+      <div className="p-5 h-full flex flex-col">
         <div className="flex flex-row items-center justify-between">
           <h1 className="text-3xl font-medium">
             Привет{`${account ? `, ${account?.name}` : ""}`}!
@@ -64,6 +74,13 @@ export const AccountMobile = () => {
             </div>
           </Link>
         </div>
+        <li
+          onClick={handleExit}
+          className="mt-auto w-full h-8 text-sm text-red-500 flex flex-row items-center justify-center gap-2 px-4 cursor-pointer"
+        >
+          <LogOut size={14} />
+          <span>Выйти</span>
+        </li>
       </div>
     </Layout>
   )

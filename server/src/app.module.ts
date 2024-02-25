@@ -21,7 +21,6 @@ import { LoyalProgram } from "./modules/loyal/loyal-program.entity";
 import { LoyalModule } from "./modules/loyal/loyal.module";
 import { TransactionModule } from "./modules/transaction/transaction.module";
 import { ShopClient } from "./modules/shop/shop-client.entity";
-import { PointTransaction } from "./modules/transaction/point-transaction.entity";
 import { Transaction } from "./modules/transaction/transaction.entity";
 import { AccountBusiness } from "./modules/account/account-business.entity";
 import { AccountModule } from "./modules/account/account.module";
@@ -57,7 +56,6 @@ import { ShopStatus } from "./modules/shop/shop-status.entity";
             AccountBusiness,
             LoyalType,
             LoyalProgram,
-            PointTransaction,
             Transaction,
           ],
           synchronize: false,

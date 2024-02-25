@@ -17,7 +17,7 @@ export const AccountSettings = () => {
       <Tabs
         defaultValue="data"
         orientation="horizontal"
-        className="flex flex-row gap-6 w-full min-h-[600px] max-sm:flex-col max-sm:gap-4"
+        className="flex flex-row gap-6 w-full min-h-[600px] max-sm:flex-col max-sm:gap-4 max-sm:min-h-full"
       >
         <TabsList className="flex-col gap-5 pb-0 bg-background border-r-2 border-muted pr-6 rounded-none h-full justify-start items-start max-sm:h-fit max-sm:flex-row max-sm:gap-2 max-sm:border-r-[0]">
           <TabsTrigger

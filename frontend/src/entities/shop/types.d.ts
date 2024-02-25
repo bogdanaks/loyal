@@ -3,6 +3,8 @@ interface Shop {
   type: ShopType
   type_id: number
   status_id: number
+  loyal_program: LoyalProgram
+  loyal_program_id: number
   title: name
   short_description: name
   description: name

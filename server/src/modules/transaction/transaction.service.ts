@@ -1,9 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { PointTransaction } from "./point-transaction.entity";
 import { DataSource, DeepPartial, Repository } from "typeorm";
 import { CreateTransaction } from "./interfaces/service.interfaces";
-import { DiscountTransaction } from "./discount-transaction.entity";
 import { Transaction } from "./transaction.entity";
 import { LoyalProgram } from "../loyal/loyal-program.entity";
 import { ShopClient } from "../shop/shop-client.entity";
@@ -12,10 +10,6 @@ import Big from "big.js";
 @Injectable()
 export class TransactionService {
   constructor(
-    @InjectRepository(PointTransaction)
-    private pointTransactionRepository: Repository<PointTransaction>,
-    @InjectRepository(DiscountTransaction)
-    private discountTransactionRepository: Repository<DiscountTransaction>,
     @InjectRepository(Transaction)
     private transactionRepository: Repository<Transaction>,
     @InjectRepository(ShopClient)
@@ -50,7 +44,7 @@ export class TransactionService {
       const baseTransaction: DeepPartial<Transaction> = {
         shop_id: data.shop_id,
         user_id: data.user_id,
-        loyal_type_id: data.loyalty_program.id,
+        loyal_type_id: data.loyalty_program.loyal_type.id,
         check_amount: Big(data.check_amount).mul(100).toString(),
       };
 

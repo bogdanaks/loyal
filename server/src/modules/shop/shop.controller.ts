@@ -49,7 +49,10 @@ export class ShopController {
       throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
     }
 
-    const shop = await this.shopService.findOneShopBy({ where: { owner_id: bizId } });
+    const shop = await this.shopService.findOneShopBy({
+      where: { owner_id: bizId },
+      relations: ["loyal_program"],
+    });
     return { data: shop };
   }
 
@@ -214,6 +217,45 @@ export class ShopController {
   }
 
   @UseGuards(JwtAccountGuard)
+  @Get("check-phone")
+  async checkPhone(@Request() req: AuthRequest, @Query() query: { payload: string }) {
+    const { accId } = req.user;
+    if (!accId) {
+      throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
+    }
+
+    const user = await this.userService.findOneBy({ phone: query.payload });
+    if (!user) {
+      throw new HttpException("User not found", HttpStatus.NOT_FOUND);
+    }
+    const client = await this.shopService.findOneClientBy({ user_id: user.id });
+    return {
+      data: {
+        ...user,
+        client,
+      },
+    };
+  }
+
+  @UseGuards(JwtAccountGuard)
+  @Get("client")
+  async getShopClient(@Request() req: AuthRequest, @Query() query: { user_id: string }) {
+    const { accId } = req.user;
+    if (!accId) {
+      throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
+    }
+
+    const user = await this.userService.findOneBy({ id: Number(query.user_id) });
+    if (!user) {
+      throw new HttpException("User not found", HttpStatus.NOT_FOUND);
+    }
+    const client = await this.shopService.findOneClientBy({ user_id: user.id });
+    return {
+      data: client,
+    };
+  }
+
+  @UseGuards(JwtAccountGuard)
   @Post("client-bonus")
   async updateClientBonus(@Request() req: AuthRequest, @Body() data: UpdateClientBonusDto) {
     const { accId } = req.user;
@@ -228,7 +270,7 @@ export class ShopController {
 
     const shop = await this.shopService.findOneShopBy({
       where: { owner_id: accId },
-      relations: ["loyal_program"],
+      relations: { loyal_program: { loyal_type: true } },
     });
     if (!shop || !shop.loyal_program) {
       throw new HttpException("Shop or loyal not found", HttpStatus.NOT_FOUND);

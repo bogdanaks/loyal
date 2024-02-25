@@ -8,8 +8,8 @@ import * as z from "zod"
 import { deleteShopPhoto, uploadShopPhoto } from "entities/shop/api"
 import { useShopStore } from "entities/shop/model/store"
 
-import { Button } from "shared/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "shared/ui/form"
+import { TelegramButton } from "shared/ui/telegram-button"
 
 import { EditBanner } from "widgets/edit-image/edit-banner"
 import { EditImage } from "widgets/edit-image/edit-image"
@@ -181,9 +181,14 @@ export const BusinessSettingsPhotos = ({ shop }: Props) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-fit mt-auto">
+        <TelegramButton
+          type="submit"
+          className="w-fit mt-auto"
+          text="Сохранить"
+          onClick={() => form.handleSubmit(onSubmit)()}
+        >
           Сохранить
-        </Button>
+        </TelegramButton>
       </form>
     </Form>
   )

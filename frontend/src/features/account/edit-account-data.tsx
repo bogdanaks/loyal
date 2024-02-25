@@ -8,9 +8,9 @@ import * as z from "zod"
 import { updateAccount } from "entities/account/api"
 import { useAccountStore } from "entities/account/model/store"
 
-import { Button } from "shared/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "shared/ui/form"
 import { Input } from "shared/ui/input"
+import { TelegramButton } from "shared/ui/telegram-button"
 
 const formSchema = z.object({
   name: z
@@ -114,9 +114,14 @@ export const EditAccountData = ({ account }: Props) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-fit mt-auto">
+        <TelegramButton
+          type="submit"
+          className="w-fit mt-auto"
+          text="Сохранить"
+          onClick={() => form.handleSubmit(onSubmit)()}
+        >
           Сохранить
-        </Button>
+        </TelegramButton>
       </form>
     </Form>
   )

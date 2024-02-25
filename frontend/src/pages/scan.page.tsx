@@ -8,7 +8,7 @@ import { Container } from "widgets/ui/container"
 export const ScanPage = () => {
   return (
     <Layout>
-      <Container title="Сканирование" className="max-w-[600px] h-full flex-col">
+      <Container title="Сканирование" className="max-w-[600px] h-full flex-col py-4">
         <div className=" flex flex-col w-full h-full items-center justify-center">
           <QrBox />
         </div>

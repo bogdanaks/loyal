@@ -10,7 +10,7 @@ export const HelpPage = () => {
   return (
     <Layout>
       <Container title="Помощь" withBack className="max-w-[900px]">
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full overflow-y-auto pb-4">
           <SendFeedback />
           <div className="flex flex-col w-full gap-1 items-center justify-center mt-20">
             <img src="/empty.png" alt="Logo" width={80} height={80} />

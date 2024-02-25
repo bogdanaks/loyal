@@ -14,6 +14,7 @@ import { cn } from "shared/libs/utils"
 import { Button } from "shared/ui/button"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "shared/ui/form"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "shared/ui/tabs"
+import { TelegramButton } from "shared/ui/telegram-button"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const maskOptions: any = {
@@ -425,9 +426,14 @@ export const BusinessSettingsWorkingHours = ({ shop }: Props) => {
                 )
               })}
             </ul>
-            <Button type="button" className="w-fit mt-auto" onClick={handleClickSave}>
+            <TelegramButton
+              type="button"
+              className="w-fit mt-auto"
+              text="Сохранить"
+              onClick={handleClickSave}
+            >
               Сохранить
-            </Button>
+            </TelegramButton>
           </div>
         </Form>
       </TabsContent>
@@ -594,9 +600,14 @@ export const BusinessSettingsWorkingHours = ({ shop }: Props) => {
                       )
                     })}
                 </ul>
-                <Button type="button" className="w-fit mt-auto" onClick={handleClickSave}>
+                <TelegramButton
+                  type="submit"
+                  className="w-fit mt-auto"
+                  text="Сохранить"
+                  onClick={handleClickSave}
+                >
                   Сохранить
-                </Button>
+                </TelegramButton>
               </div>
             </TabsContent>
           )

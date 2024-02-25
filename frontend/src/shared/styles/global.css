@@ -82,3 +82,7 @@ input::placeholder,
 textarea::placeholder {
   opacity: 0.5;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}

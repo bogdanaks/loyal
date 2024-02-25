@@ -7,10 +7,10 @@ import * as z from "zod"
 import { getShopStatuses, getShopTypes, updateShop } from "entities/shop/api"
 import { useShopStore } from "entities/shop/model/store"
 
-import { Button } from "shared/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "shared/ui/form"
 import { Input } from "shared/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "shared/ui/select"
+import { TelegramButton } from "shared/ui/telegram-button"
 import { Textarea } from "shared/ui/textarea"
 
 const formSchema = z.object({
@@ -174,9 +174,14 @@ export const BusinessSettingsData = ({ shop }: Props) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-fit mt-auto">
+        <TelegramButton
+          type="submit"
+          className="w-fit mt-auto"
+          text="Сохранить"
+          onClick={() => form.handleSubmit(onSubmit)()}
+        >
           Сохранить
-        </Button>
+        </TelegramButton>
       </form>
     </Form>
   )

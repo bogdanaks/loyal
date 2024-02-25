@@ -11,9 +11,9 @@ import { getAddressSuggestion } from "entities/dadata/api"
 import { updateShop } from "entities/shop/api"
 import { useShopStore } from "entities/shop/model/store"
 
-import { Button } from "shared/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "shared/ui/form"
 import { Input } from "shared/ui/input"
+import { TelegramButton } from "shared/ui/telegram-button"
 
 const formSchema = z.object({
   phone: z.string().min(10, { message: "Неверный формат" }).optional(),
@@ -138,9 +138,14 @@ export const BusinessSettingsContacts = ({ shop }: Props) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-fit mt-auto">
+        <TelegramButton
+          type="submit"
+          className="w-fit mt-auto"
+          text="Сохранить"
+          onClick={() => form.handleSubmit(onSubmit)()}
+        >
           Сохранить
-        </Button>
+        </TelegramButton>
       </form>
     </Form>
   )

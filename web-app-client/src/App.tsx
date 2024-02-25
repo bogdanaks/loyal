@@ -1,5 +1,5 @@
 import { AnimatePresence } from "framer-motion";
-import { AuthUserProvider, RouteAnimation } from "processes";
+import { AuthUserProvider } from "processes";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { HomePage } from "pages/home";

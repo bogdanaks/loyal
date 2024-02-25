@@ -29,7 +29,7 @@ export const Container = ({ children, title, className, withBack = false }: Prop
       <div className="p-4 flex h-fit overflow-hidden max-sm:p-0 max-sm:bg-muted max-sm:h-full">
         <div
           className={cn(
-            "bg-background p-5 rounded-3xl flex h-full w-full max-sm:rounded-none max-sm:p-0 max-sm:px-4",
+            "bg-background p-5 rounded-3xl flex h-full w-full max-sm:rounded-none max-sm:p-0 max-sm:px-4 max-sm:overflow-y-auto",
             className
           )}
         >
