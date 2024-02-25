@@ -1,6 +1,7 @@
 import { AuthProvider } from "processes/auth-provider"
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 
+import { AccountMobile } from "pages/account-mobile"
 import { AccountSettingsPage } from "pages/account-settings.page"
 import { LoginPage } from "pages/auth/login.page"
 import { RegisterPage } from "pages/auth/register.page"
@@ -11,6 +12,7 @@ import { HelpPage } from "pages/help.page"
 import { LoyalPage } from "pages/loyal.page"
 import { PayPage } from "pages/pay.page"
 import { PrivacyPolicyPage } from "pages/privacy-policy.page"
+import { ScanPage } from "pages/scan.page"
 import { UserAgreementPage } from "pages/user-agreement.page"
 
 import { config } from "shared/config"
@@ -33,6 +35,9 @@ function App() {
           <Route path="/account-settings" element={<AccountSettingsPage />} />
           <Route path="/help" element={<HelpPage />} />
           <Route path="/pay" element={<PayPage />} />
+          <Route path="/scan" element={<ScanPage />} />
+
+          <Route path="/account-mobile" element={<AccountMobile />} />
         </Route>
       </Routes>
     </BrowserRouter>

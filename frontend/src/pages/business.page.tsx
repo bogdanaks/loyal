@@ -1,12 +1,14 @@
 import { BusinessSettings } from "features/business"
 
+import { Container } from "widgets/ui/container"
 import { Layout } from "widgets/ui/layout"
 
 export const BusinessPage = () => {
   return (
     <Layout>
-      <h1 className="min-h-12 flex items-center text-3xl font-bold px-4">Мой бизнес</h1>
-      <BusinessSettings />
+      <Container title="Мой бизнес" withBack className="max-w-[900px]">
+        <BusinessSettings />
+      </Container>
     </Layout>
   )
 }

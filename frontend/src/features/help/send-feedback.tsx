@@ -43,7 +43,7 @@ export const SendFeedback = () => {
 
   return (
     <Form {...form}>
-      <form className="flex flex-col w-full gap-3 h-full" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="flex flex-col w-full gap-3" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="text"

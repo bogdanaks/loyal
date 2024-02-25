@@ -3,14 +3,14 @@ import { Link } from "react-router-dom"
 
 import { config } from "shared/config"
 
+import { Container } from "widgets/ui/container"
 import { Layout } from "widgets/ui/layout"
 
 export const HelpPage = () => {
   return (
     <Layout>
-      <h1 className="min-h-12 flex items-center text-3xl font-bold px-4">Помощь</h1>
-      <div className="p-4">
-        <div className="bg-background p-5 rounded-3xl flex flex-col">
+      <Container title="Помощь" withBack className="max-w-[900px]">
+        <div className="flex flex-col w-full">
           <SendFeedback />
           <div className="flex flex-col w-full gap-1 items-center justify-center mt-20">
             <img src="/empty.png" alt="Logo" width={80} height={80} />
@@ -31,7 +31,7 @@ export const HelpPage = () => {
             </Link>
           </ul>
         </div>
-      </div>
+      </Container>
     </Layout>
   )
 }

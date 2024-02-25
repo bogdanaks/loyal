@@ -15,6 +15,7 @@ import {
 } from "shared/ui/dialog"
 import { Input } from "shared/ui/input"
 
+import { Container } from "widgets/ui/container"
 import { Layout } from "widgets/ui/layout"
 
 export const ClientsDetailPage = () => {
@@ -24,12 +25,8 @@ export const ClientsDetailPage = () => {
 
   return (
     <Layout>
-      <div className="min-h-12 px-4 flex flex-row items-center">
-        <ChevronLeft size={34} className="text-black cursor-pointer" onClick={() => navigate(-1)} />
-        <h1 className="flex items-center text-3xl font-bold ml-4">Богдан А.</h1>
-      </div>
-      <div className="p-4 flex overflow-hidden">
-        <div className="bg-background p-5 rounded-3xl flex w-full max-w-[600px]">
+      <Container title="Богдан А." withBack className="max-w-[600px]">
+        <div className="flex w-full">
           <div className="h-full flex flex-col w-full">
             <div className="flex flex-row gap-10 w-full items-center justify-between">
               <div className="flex flex-col">
@@ -93,7 +90,7 @@ export const ClientsDetailPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     </Layout>
   )
 }

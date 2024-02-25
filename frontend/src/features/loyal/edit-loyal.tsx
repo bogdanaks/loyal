@@ -75,102 +75,100 @@ export const EditLoyal = () => {
   }
 
   return (
-    <div className="bg-background p-5 rounded-3xl flex m-4">
-      <Form {...form}>
-        <form className="flex flex-col w-full gap-3 h-full" onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="type_id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Тип программы</FormLabel>
-                <FormDescription>
-                  <p>Бонусная - баллы за покупки, обмениваются в счёт покупки.</p>
-                  <p>Дисконтная - постоянный процент скидки.</p>
-                </FormDescription>
-                <FormControl>
-                  <Select
-                    onValueChange={(val) => field.onChange(Number(val))}
-                    defaultValue={field?.value?.toString()}
-                    value={field?.value?.toString()}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={field.value?.toString()} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {loyalTypes?.data.map((type) => (
-                        <SelectItem key={type.id} value={type.id.toString()}>
-                          {type.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="percent_bonus"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Процент скидки/баллов от суммы покупки</FormLabel>
-                <FormControl>
-                  <IMaskInput
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    value={field.value?.toString()}
-                    unmask={true}
-                    mask={Number}
-                    normalizeZeros
-                    autofix
-                    name="percent"
-                    maxLength={2}
-                    inputMode="numeric"
-                    from={1}
-                    to={99}
-                    placeholder="10"
-                    onAccept={(value) => {
-                      field.onChange(value)
-                    }}
-                    disabled={!watchType}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="reg_bonus"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Единоразовое начисление баллов при регистрации</FormLabel>
-                <FormControl>
-                  <IMaskInput
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    value={field.value?.toString()}
-                    unmask={true}
-                    mask={Number}
-                    normalizeZeros
-                    autofix
-                    name="reg-bonus"
-                    inputMode="numeric"
-                    onAccept={(value) => {
-                      field.onChange(value)
-                    }}
-                    placeholder="100"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" className="w-fit mt-4">
-            Сохранить
-          </Button>
-        </form>
-      </Form>
-    </div>
+    <Form {...form}>
+      <form className="flex flex-col w-full gap-3 h-full" onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="type_id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Тип программы</FormLabel>
+              <FormDescription>
+                <p>Бонусная - баллы за покупки, обмениваются в счёт покупки.</p>
+                <p>Дисконтная - постоянный процент скидки.</p>
+              </FormDescription>
+              <FormControl>
+                <Select
+                  onValueChange={(val) => field.onChange(Number(val))}
+                  defaultValue={field?.value?.toString()}
+                  value={field?.value?.toString()}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder={field.value?.toString()} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {loyalTypes?.data.map((type) => (
+                      <SelectItem key={type.id} value={type.id.toString()}>
+                        {type.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="percent_bonus"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Процент скидки/баллов от суммы покупки</FormLabel>
+              <FormControl>
+                <IMaskInput
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  value={field.value?.toString()}
+                  unmask={true}
+                  mask={Number}
+                  normalizeZeros
+                  autofix
+                  name="percent"
+                  maxLength={2}
+                  inputMode="numeric"
+                  from={1}
+                  to={99}
+                  placeholder="10"
+                  onAccept={(value) => {
+                    field.onChange(value)
+                  }}
+                  disabled={!watchType}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="reg_bonus"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Единоразовое начисление баллов при регистрации</FormLabel>
+              <FormControl>
+                <IMaskInput
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  value={field.value?.toString()}
+                  unmask={true}
+                  mask={Number}
+                  normalizeZeros
+                  autofix
+                  name="reg-bonus"
+                  inputMode="numeric"
+                  onAccept={(value) => {
+                    field.onChange(value)
+                  }}
+                  placeholder="100"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" className="w-fit mt-4">
+          Сохранить
+        </Button>
+      </form>
+    </Form>
   )
 }

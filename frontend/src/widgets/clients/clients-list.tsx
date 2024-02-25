@@ -146,7 +146,7 @@ const clients: User[] = [
 
 export const ClientsList = () => {
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-full h-full pt-2">
       <Input placeholder="Поиск" className="mb-4 rounded-3xl bg-primary-foreground border-none" />
       <ScrollArea className="h-full w-full">
         {clients.map((client) => (
