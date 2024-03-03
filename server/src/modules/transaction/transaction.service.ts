@@ -36,6 +36,7 @@ export class TransactionService {
         bonus = Big(bonus).plus(data.loyalty_program.reg_bonus).toString();
         client = await queryRunner.manager.save(ShopClient, {
           user_id: data.user_id,
+          shop_id: data.shop_id,
           is_active: true,
           balance: data.loyalty_program.reg_bonus.toString(),
         });

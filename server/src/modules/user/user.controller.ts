@@ -48,6 +48,7 @@ export class UserController {
   @UseInterceptors(FileInterceptor("photo"))
   @Patch("photo")
   async updatePhoto(@Request() req: AuthRequest, @UploadedFile() photo: Express.Multer.File) {
+    console.log("updatePhoto req", req.user);
     const userId = req.user.id;
     if (!userId) {
       throw new HttpException("User not found", HttpStatus.NOT_FOUND);

@@ -18,12 +18,12 @@ export class UpdateMyShopDataDto {
 
   @IsOptional()
   @IsString()
-  @MaxLength(40)
+  @MaxLength(100)
   short_description: string;
 
   @IsOptional()
   @IsString()
-  @MaxLength(40)
+  @MaxLength(500)
   description: string;
 
   @IsOptional()
@@ -52,4 +52,9 @@ export class UpdateClientBonusDto {
   @IsOptional()
   @IsNumber()
   point_amount: number;
+}
+
+export class TypeIdDto {
+  @IsString()
+  type_id: string;
 }

@@ -1,10 +1,11 @@
-import { Text } from "react-native"
+import { LoginForm } from "features/auth"
+
 import { ScreenContainer } from "widgets/ui/screen-container"
 
-export const PrivacyPolicyScreen = () => {
+export const LoginScreen = () => {
   return (
     <ScreenContainer>
-      <Text>PrivacyPolicyScreen</Text>
+      <LoginForm />
     </ScreenContainer>
   )
 }

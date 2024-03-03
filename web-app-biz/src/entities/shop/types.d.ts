@@ -1,8 +1,8 @@
 interface Shop {
   id: number;
-  title: name;
-  short_description: name;
-  description: name;
+  title: string;
+  short_description: string;
+  description: string;
   working_hours: WorkingHours;
   photo: string;
   banners: string[];
@@ -15,7 +15,7 @@ interface Shop {
 
 interface ShopType {
   id: number;
-  title: name;
+  title: string;
   created_at: string;
   updated_at: string;
 }

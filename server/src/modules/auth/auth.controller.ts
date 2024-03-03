@@ -10,11 +10,14 @@ import {
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import {
+  CheckOtpCode,
   LoginBizDto,
   LoginGetCode,
   LoginTelegram,
+  LoginUser,
   RegisterBizDto,
   RegisterTelegram,
+  RegisterUser,
 } from "./dto/auth-dto";
 import { JwtGuard } from "./jwt.guard";
 import { JwtService } from "@nestjs/jwt";
@@ -129,6 +132,53 @@ export class AuthController {
   getCode(@Body() loginGetCode: LoginGetCode) {
     const res = this.authService.getOtpCode(loginGetCode.phone);
     return { data: res };
+  }
+
+  @Post("check-code")
+  async checkCode(@Body() data: CheckOtpCode) {
+    const isVerify = this.authService.checkOtpCode(data.otp, data.phone);
+    if (!isVerify) {
+      throw new HttpException("Incorrect data", HttpStatus.BAD_REQUEST);
+    }
+
+    return { data: isVerify };
+  }
+
+  @Post("login-user")
+  async loginUser(@Body() data: LoginUser) {
+    const user = await this.userService.findOneBy({ phone: data.phone });
+    if (user && user.phone && user.birthday) {
+      const jwtCode = this.jwtService.sign(
+        { data: user.id },
+        { secret: this.configService.get("jwtUserSecretKey"), expiresIn: "30d" }
+      );
+
+      return { data: { token: jwtCode, user } };
+    } else {
+      throw new HttpException("User not found", HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @Post("register-user")
+  async registerUser(@Body() data: RegisterUser) {
+    const user = await this.userService.findOneBy({ phone: data.phone });
+    if (user && user.phone && user.birthday) {
+      const jwtCode = this.jwtService.sign(
+        { data: user.id },
+        { secret: this.configService.get("jwtUserSecretKey"), expiresIn: "30d" }
+      );
+
+      return { data: { token: jwtCode, user } };
+    } else {
+      const newUser = await this.userService.saveUser(data);
+
+      const jwtCode = this.jwtService.sign(
+        { data: newUser.id },
+        { secret: this.configService.get("jwtUserSecretKey"), expiresIn: "30d" }
+      );
+
+      return { data: { token: jwtCode, user: newUser } };
+    }
   }
 
   @Post("logout")

@@ -5,7 +5,7 @@ import { RegisterTelegram } from "./dto/auth-dto";
 import { UserService } from "../user/user.service";
 import { User } from "../user/user.entity";
 
-totp.options = { digits: 4, step: 120 };
+totp.options = { digits: 4, step: 60 };
 
 @Injectable()
 export class AuthService {
@@ -19,13 +19,13 @@ export class AuthService {
   }
 
   getOtpCode(phone: string): string {
-    const otpCode = totp.generate(this.configService.get("otpSecretKey"));
+    const otpCode = totp.generate(`${this.configService.get("otpSecretKey")}:${phone}`);
     console.log(`Code sent to +7${phone} - ${otpCode}`);
     return otpCode;
   }
 
-  checkOtpCode(otp: string) {
-    return totp.check(otp, this.configService.get("otpSecretKey"));
+  checkOtpCode(otp: string, phone: string) {
+    return totp.check(otp, `${this.configService.get("otpSecretKey")}:${phone}`);
   }
 
   async saveTelegramUser(data: RegisterTelegram): Promise<User> {

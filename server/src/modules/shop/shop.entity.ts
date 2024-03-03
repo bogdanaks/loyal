@@ -58,7 +58,7 @@ export class Shop {
   @Column({ type: "character varying", length: 100 })
   short_description: string;
 
-  @Column({ type: "character varying", length: 100 })
+  @Column({ type: "character varying", length: 500 })
   description: string;
 
   @Column({ type: "character varying", length: 100 })

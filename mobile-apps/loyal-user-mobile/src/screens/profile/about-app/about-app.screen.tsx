@@ -1,30 +1,41 @@
 import { StackScreenProps } from "@react-navigation/stack"
-import { Image, Pressable, StyleSheet, Text, View } from "react-native"
+import { Image } from "expo-image"
+import { StatusBar } from "expo-status-bar"
+import { Pressable, StyleSheet, Text, View } from "react-native"
+
+import { useMyTheme } from "shared/hooks/use-my-theme"
+
 import { ScreenContainer } from "widgets/ui/screen-container"
+
 import { AboutStackParamList } from "./about-app.navigator"
 
 export const AboutAppScreen = ({ navigation }: StackScreenProps<AboutStackParamList>) => {
+  const { colors } = useMyTheme()
+
   const handlePress = (value: keyof AboutStackParamList) => {
     navigation.navigate(value)
   }
 
   return (
     <ScreenContainer>
+      <StatusBar style="dark" animated={true} backgroundColor="#fff" />
       <View style={styles.container}>
         <View style={styles.versionBlock}>
           <Image
             style={styles.logo}
             source={require("/Users/user/Desktop/my/loyal/mobile-apps/loyal-user-mobile/assets/favicon.png")}
+            contentFit="cover"
+            cachePolicy="disk"
           />
           <Text style={styles.version}>Версия 1.0.0</Text>
         </View>
         <View style={styles.btns}>
           <Pressable style={styles.btn} onPress={() => handlePress("UserAgreement")}>
-            <Text>Пользовательское соглашение</Text>
+            <Text style={{ color: colors.primary }}>Пользовательское соглашение</Text>
           </Pressable>
           <Pressable style={styles.btn} onPress={() => handlePress("PrivacyPolicy")}>
             <View>
-              <Text>Политика конфиденциальности</Text>
+              <Text style={{ color: colors.primary }}>Политика конфиденциальности</Text>
             </View>
           </Pressable>
         </View>
@@ -60,7 +71,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     padding: 10,
-    backgroundColor: "#fff",
+    backgroundColor: "#f1f5f9",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,

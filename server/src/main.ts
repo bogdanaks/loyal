@@ -10,7 +10,9 @@ async function bootstrap() {
       "http://127.0.0.1:5173",
       "http://localhost:5173",
       "http://192.168.31.21:5173",
+      "http://localhost:5174",
       "http://192.168.31.21:5174",
+      "http://localhost:8081",
     ],
     methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
     credentials: true,
@@ -19,10 +21,5 @@ async function bootstrap() {
   app.setGlobalPrefix("api/v1");
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(5000);
-
-  // const telegramBot = await NestFactory.createMicroservice<MicroserviceOptions>(TelegramModule, {
-  //   transport: Transport.TCP,
-  // });
-  // await telegramBot.listen();
 }
 bootstrap();

@@ -40,6 +40,22 @@ export class LoginGetCode {
   phone: string;
 }
 
+export class LoginUser {
+  @IsMobilePhone("ru-RU")
+  phone: string;
+}
+
+export class RegisterUser {
+  @IsMobilePhone("ru-RU")
+  phone: string;
+
+  @IsString()
+  name: string;
+
+  @IsString()
+  birthday: string;
+}
+
 export class CheckOtpCode {
   @IsString()
   @MinLength(4)

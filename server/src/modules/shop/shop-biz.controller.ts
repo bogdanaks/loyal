@@ -5,6 +5,7 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Param,
   Patch,
   Post,
   Query,
@@ -26,8 +27,8 @@ import { TransactionService } from "../transaction/transaction.service";
 import { ConfigService } from "@nestjs/config";
 import { URLSearchParams } from "node:url";
 
-@Controller({ path: "shop" })
-export class ShopController {
+@Controller({ path: "shop-biz" })
+export class ShopBizController {
   constructor(
     private readonly shopService: ShopService,
     private readonly userService: UserService,
@@ -207,7 +208,7 @@ export class ShopController {
     if (!user) {
       throw new HttpException("User not found", HttpStatus.NOT_FOUND);
     }
-    const client = await this.shopService.findOneClientBy({ user_id: user.id });
+    const client = await this.shopService.findOneClientBy({ where: { user: { id: user.id } } });
     return {
       data: {
         ...user,
@@ -228,7 +229,7 @@ export class ShopController {
     if (!user) {
       throw new HttpException("User not found", HttpStatus.NOT_FOUND);
     }
-    const client = await this.shopService.findOneClientBy({ user_id: user.id });
+    const client = await this.shopService.findOneClientBy({ where: { user: { id: user.id } } });
     return {
       data: {
         ...user,
@@ -239,19 +240,36 @@ export class ShopController {
 
   @UseGuards(JwtAccountGuard)
   @Get("client")
-  async getShopClient(@Request() req: AuthRequest, @Query() query: { user_id: string }) {
+  async getShopClients(@Request() req: AuthRequest) {
     const { accId } = req.user;
     if (!accId) {
       throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
     }
 
-    const user = await this.userService.findOneBy({ id: Number(query.user_id) });
-    if (!user) {
-      throw new HttpException("User not found", HttpStatus.NOT_FOUND);
-    }
-    const client = await this.shopService.findOneClientBy({ user_id: user.id });
+    const clients = await this.shopService.findClientsBy({ relations: { user: true } });
     return {
-      data: client,
+      data: clients,
+    };
+  }
+
+  @UseGuards(JwtAccountGuard)
+  @Get("client/:id")
+  async getShopClient(@Request() req: AuthRequest, @Param("id") id) {
+    const { accId } = req.user;
+    if (!accId) {
+      throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
+    }
+
+    const client = await this.shopService.findOneClientBy({
+      where: { id },
+      relations: { user: true },
+    });
+    // const transactions // TODO count of transactions
+
+    return {
+      data: {
+        ...client,
+      },
     };
   }
 

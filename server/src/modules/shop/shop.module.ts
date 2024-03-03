@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
-import { ShopController } from "./shop.controller";
+import { ShopBizController } from "./shop-biz.controller";
+import { ShopClientController } from "./shop-client.controller";
 import { ShopService } from "./shop.service";
 import { UserModule } from "../user/user.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -16,7 +17,7 @@ import { ShopStatus } from "./shop-status.entity";
     UserModule,
     TransactionModule,
   ],
-  controllers: [ShopController],
+  controllers: [ShopBizController, ShopClientController],
   providers: [ShopService],
   exports: [ShopService],
 })

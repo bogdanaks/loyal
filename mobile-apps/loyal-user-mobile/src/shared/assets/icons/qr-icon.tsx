@@ -1,70 +1,62 @@
 import * as React from "react"
 import Svg, { SvgProps, Path, G, Circle } from "react-native-svg"
 export const QrIcon = (props: SvgProps) => (
-  <Svg viewBox="0 0 72 72" {...props}>
-    <Path d="M20 20h4v4h-4zM20 48h4v4h-4zM48 20h4v4h-4z" />
-    <G stroke="#000" strokeLinejoin="round" strokeWidth={2}>
-      <Path fill="#fff" d="M12 12h48v48H12z" />
-      <Path fill="#3F3F3F" d="M20 20h4v4h-4zM20 48h4v4h-4zM48 20h4v4h-4z" />
-    </G>
-    <Circle cx={18} cy={40} r={1} />
-    <Circle cx={16} cy={38} r={1} />
-    <Circle cx={20} cy={38} r={1} />
-    <Circle cx={34} cy={46} r={1} />
-    <Circle cx={40} cy={38} r={1} />
-    <Circle cx={40} cy={28} r={1} />
-    <Circle cx={32} cy={16} r={1} />
-    <Circle cx={46} cy={32} r={1} />
-    <Circle cx={52} cy={32} r={1} />
-    <Circle cx={52} cy={44} r={1} />
-    <Circle cx={54} cy={48} r={1} />
-    <Circle cx={56} cy={56} r={1} />
-    <Circle cx={32} cy={56} r={1} />
-    <Circle cx={44} cy={56} r={1} />
-    <Circle cx={46} cy={54} r={1} />
-    <Circle cx={44} cy={52} r={1} />
-    <Circle cx={16} cy={32} r={1} />
-    <Circle cx={40} cy={54} r={1} />
-    <Path fill="none" stroke="#000" strokeLinejoin="round" strokeWidth={2} d="M12 12h48v48H12z" />
-    <Path fill="none" stroke="#000" strokeLinejoin="round" strokeWidth={2} d="M16 16h12v12H16z" />
+  <Svg width={24} height={24} fill="none" {...props}>
     <Path
-      fill="none"
-      stroke="#000"
+      fill="#4C38FF"
+      d="M8 6.667H6.667V8H8V6.667ZM8 16H6.667v1.333H8V16Zm9.333-9.333H16V8h1.333V6.667Z"
+    />
+    <Path stroke="#4C38FF" strokeLinejoin="round" d="M20 4H4v16h16V4Z" />
+    <Path
+      fill="#3F3F3F"
+      stroke="#4C38FF"
       strokeLinejoin="round"
-      strokeWidth={2}
-      d="M20 20h4v4h-4zM16 44h12v12H16z"
+      d="M8 6.667H6.667V8H8V6.667ZM8 16H6.667v1.333H8V16Zm9.333-9.333H16V8h1.333V6.667Z"
     />
     <Path
-      fill="none"
-      stroke="#000"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M20 48h4v4h-4zM44 16h12v12H44z"
+      fill="#4C38FF"
+      d="M6 13.667A.333.333 0 1 0 6 13a.333.333 0 0 0 0 .667ZM5.333 13a.333.333 0 1 0 0-.667.333.333 0 0 0 0 .667Zm1.333 0a.333.333 0 1 0 0-.667.333.333 0 0 0 0 .667Zm4.667 2.667a.333.333 0 1 0 0-.667.333.333 0 0 0 0 .667Zm2-2.667a.333.333 0 1 0 0-.667.333.333 0 0 0 0 .667Zm0-3.333a.333.333 0 1 0 0-.667.333.333 0 0 0 0 .667Zm-2.667-4a.333.333 0 1 0 0-.667.333.333 0 0 0 0 .667ZM15.333 11a.333.333 0 1 0 0-.667.333.333 0 0 0 0 .667Zm2 0a.333.333 0 1 0 0-.667.333.333 0 0 0 0 .667Zm0 4a.333.333 0 1 0 0-.667.333.333 0 0 0 0 .667ZM18 16.333a.333.333 0 1 0 0-.666.333.333 0 0 0 0 .666ZM18.666 19a.333.333 0 1 0 0-.667.333.333 0 0 0 0 .667Zm-8 0a.333.333 0 1 0 0-.667.333.333 0 0 0 0 .667Zm4 0a.333.333 0 1 0 0-.667.333.333 0 0 0 0 .667Zm.667-.667a.333.333 0 1 0 0-.666.333.333 0 0 0 0 .666Zm-.667-.666a.333.333 0 1 0 0-.667.333.333 0 0 0 0 .667ZM5.333 11a.333.333 0 1 0 0-.667.333.333 0 0 0 0 .667Zm8 7.333a.333.333 0 1 0 0-.666.333.333 0 0 0 0 .666Z"
     />
-    <Path fill="none" stroke="#000" strokeLinejoin="round" strokeWidth={2} d="M48 20h4v4h-4z" />
+    <Path stroke="#4C38FF" strokeLinejoin="round" strokeWidth={0.7} d="M20 4H4v16h16V4Z" />
+    <Path stroke="#4C38FF" strokeLinejoin="round" strokeWidth={0.7} d="M9.333 5.333h-4v4h4v-4Z" />
     <Path
-      fill="none"
-      stroke="#000"
+      stroke="#4C38FF"
+      strokeLinejoin="round"
+      strokeWidth={0.7}
+      d="M8 6.667H6.667V8H8V6.667Zm1.333 8h-4v4h4v-4Z"
+    />
+    <Path
+      stroke="#4C38FF"
+      strokeLinejoin="round"
+      strokeWidth={0.7}
+      d="M8 16H6.667v1.333H8V16ZM18.667 5.333h-4v4h4v-4Z"
+    />
+    <Path
+      stroke="#4C38FF"
+      strokeLinejoin="round"
+      strokeWidth={0.7}
+      d="M17.333 6.667H16V8h1.333V6.667Z"
+    />
+    <Path
+      stroke="#4C38FF"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth={2}
-      d="M18 36v-2h8M20 34v-2M24 34v6M24 38h2M38 32v-2M56 34h-2M42 42h2v-2M28 32h2M34 32h6M38 16v4h-2v8M36 26h-4v2M36 20h-4"
+      strokeWidth={0.7}
+      d="M6 12v-.667h2.667m-2 0v-.666M8 11.333v2m0-.666h.667m4-2V10m6 1.333H18M14 14h.667v-.667m-5.334-2.666H10m1.333 0h2m-.666-5.334v1.334H12v2.666m0-.666h-1.333v.666M12 6.667h-1.333"
     />
     <Path
-      fill="none"
-      stroke="#000"
+      stroke="#4C38FF"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth={2}
-      d="M36 22h-2v-4M28 36h8M30 36v4h-2M34 36v2M32 44v-2h6v6h4v-2h8v10"
+      strokeWidth={0.7}
+      d="M12 7.333h-.667V6m-2 6H12m-2 0v1.333h-.667m2-1.333v.667m-.666 2V14h2v2H14v-.667h2.667v3.334"
     />
     <Path
-      fill="none"
-      stroke="#000"
+      stroke="#4C38FF"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth={2}
-      d="M36 40v4h6m4-4h-4v8h2M48 34v4h2v4h-2v4M50 38v-2h2M52 50h-4v2M32 52h2v2h2v-4M56 32v6h-2M44 36v-2M56 42v2M54 52h2M40 22v2"
+      strokeWidth={0.7}
+      d="M12 13.333v1.334h2m1.333-1.334H14V16h.667M16 11.333v1.334h.667V14H16v1.333m.667-2.666V12h.667m-.001 4.667H16v.666m-5.333 0h.667V18H12v-1.333m6.667-6v2H18M14.667 12v-.667m4 2.667v.667M18 17.333h.667m-5.334-10V8"
     />
   </Svg>
 )

@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./user.entity";
 import { FindOptionsWhere, Repository } from "typeorm";
 import { SaveTelegramUser } from "./interfaces";
+import { RegisterUser } from "../auth/dto/auth-dto";
 
 @Injectable()
 export class UserService {
@@ -21,6 +22,15 @@ export class UserService {
       },
       ["tg_user_id"]
     );
+  }
+
+  async saveUser(user: RegisterUser): Promise<User> {
+    await this.usersRepository.save({
+      phone: user.phone,
+      first_name: user.name,
+      birthday: user.birthday,
+    });
+    return await this.usersRepository.findOneBy({ phone: user.phone });
   }
 
   async updateUserById(id: number, userData: Partial<User>): Promise<void> {

@@ -1,5 +1,5 @@
-import React, { PropsWithChildren } from "react"
-import { SafeAreaView, StyleProp, StyleSheet, ViewStyle } from "react-native"
+import React from "react"
+import { SafeAreaView, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 
 interface Props {
   children: React.ReactNode
@@ -13,7 +13,10 @@ export const ScreenContainer = ({ children, style }: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexGrow: 1,
+    flexDirection: "column",
     width: "auto",
-    padding: 20,
+    backgroundColor: "#fff",
+    paddingHorizontal: 16,
   },
 })

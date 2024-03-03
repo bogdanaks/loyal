@@ -6,7 +6,7 @@ interface Props {
   children: React.ReactNode
 }
 
-export const TabBarButton = ({ isActive, children }: Props) => {
+export const NavigationTabBarButton = ({ isActive, children }: Props) => {
   return <View style={[styles.container, isActive && styles.active]}>{children}</View>
 }
 
@@ -14,8 +14,9 @@ const styles = StyleSheet.create({
   container: {
     padding: 4,
     borderRadius: 5,
+    opacity: 0.5,
   },
   active: {
-    backgroundColor: "#E8E8E8",
+    opacity: 1,
   },
 })

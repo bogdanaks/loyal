@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectBot } from "nestjs-telegraf";
 import { Context, Telegraf } from "telegraf";
 import { InjectRepository } from "@nestjs/typeorm";
-import { FindOneOptions, FindOptionsWhere, Repository } from "typeorm";
+import { FindManyOptions, FindOneOptions, FindOptionsWhere, Repository } from "typeorm";
 import { ShopType } from "./shop-type.entity";
 import { Shop } from "./shop.entity";
 import { ShopClient } from "./shop-client.entity";
@@ -38,8 +38,20 @@ export class ShopService {
     return await this.shopRepository.findOne(options);
   }
 
-  async findOneClientBy(where: FindOptionsWhere<ShopClient>): Promise<ShopClient> {
-    return await this.shopClientRepository.findOneBy(where);
+  async findShopBy(options: FindManyOptions<Shop>): Promise<Shop[]> {
+    return await this.shopRepository.find(options);
+  }
+
+  async findShopClientByUser(where: FindManyOptions<ShopClient>): Promise<ShopClient[]> {
+    return await this.shopClientRepository.find(where);
+  }
+
+  async findClientsBy(options: FindOneOptions<ShopClient>): Promise<ShopClient[]> {
+    return await this.shopClientRepository.find(options);
+  }
+
+  async findOneClientBy(options: FindOneOptions<ShopClient>): Promise<ShopClient> {
+    return await this.shopClientRepository.findOne(options);
   }
 
   async findLoyalProgramBy(where: FindOptionsWhere<LoyalProgram>): Promise<LoyalProgram> {

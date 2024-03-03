@@ -1,20 +1,25 @@
-import { StyleSheet, View } from "react-native"
 import { NavigationContainer } from "@react-navigation/native"
-import { TabBar } from "widgets/ui/tab-bar/tab-bar"
+import { AuthScreen } from "processes/auth-screen"
+
+import { MyThemeContext } from "shared/hooks/use-my-theme"
+
+const MyTheme = {
+  colors: {
+    background: "#fff",
+    primary: "#2563eb",
+    primaryForeground: "#f8fafc",
+    muted: "#f1f5f9",
+    mutedForeground: "#64748b",
+    input: "#e2e8f0",
+  },
+}
 
 export default function AppIndex() {
   return (
-    <NavigationContainer>
-      <View style={styles.container}>
-        <TabBar />
-      </View>
-    </NavigationContainer>
+    <MyThemeContext.Provider value={MyTheme}>
+      <NavigationContainer>
+        <AuthScreen />
+      </NavigationContainer>
+    </MyThemeContext.Provider>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-})

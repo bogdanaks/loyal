@@ -8,6 +8,7 @@ import {
   JoinColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
+import { Shop } from "./shop.entity";
 
 @Entity({ name: "shop_client" })
 export class ShopClient {
@@ -20,8 +21,17 @@ export class ShopClient {
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @Column({ name: "user_id", type: "integer" })
+  @Column({ name: "user_id", type: "bigint" })
   user_id: number;
+
+  @ManyToOne(() => Shop, {
+    cascade: true,
+  })
+  @JoinColumn({ name: "shop_id" })
+  shop: Shop;
+
+  @Column({ name: "shop_id", type: "bigint" })
+  shop_id: number;
 
   @Column({ type: "bigint" })
   balance: string;

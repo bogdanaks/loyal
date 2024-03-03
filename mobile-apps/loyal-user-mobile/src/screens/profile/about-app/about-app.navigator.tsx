@@ -1,5 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack"
-import { PrivacyPolicyScreen } from "../privacy-policy.screen"
+import { PrivacyPolicyScreen } from "screens/privacy-policy.screen"
+
 import { UserAgreementScreen } from "../user-agreement.screen"
 import { AboutAppScreen } from "./about-app.screen"
 
