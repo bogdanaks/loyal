@@ -33,6 +33,7 @@ interface ShopStatus {
 
 interface ShopClient {
   id: number
+  user: User
   user_id: number
   balance: number
   is_active: boolean

@@ -27,7 +27,7 @@ export const ScanSuccess = ({ isOpen, onOpenChange, client, loyalProgram }: Prop
     enabled: !!client,
   })
 
-  const balance = data?.data.balance ?? 0
+  const balance = data?.data?.balance ?? 0
   const [successPayment, setSuccessPayment] = useState<null | SuccessPaymentData>(null)
 
   const handleClose = () => {

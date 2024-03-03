@@ -3,16 +3,28 @@ import React from "react"
 import { useNavigate } from "react-router-dom"
 
 import { cn } from "shared/libs/utils"
+import { Spinner } from "shared/ui/spinner"
 
 interface Props {
   title: string
   children: React.ReactNode
   className?: string
   withBack?: boolean
+  isLoading?: boolean
 }
 
-export const Container = ({ children, title, className, withBack = false }: Props) => {
+export const Container = ({ children, title, className, withBack = false, isLoading }: Props) => {
   const navigate = useNavigate()
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col w-full h-full pt-2">
+        <div className="flex flex-row items-center justify-center min-h-32">
+          <Spinner />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>

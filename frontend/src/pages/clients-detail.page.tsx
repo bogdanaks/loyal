@@ -1,7 +1,8 @@
-import { ChevronLeft } from "lucide-react"
-import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
+import { getShopClient } from "entities/shop/api"
 import { UserPhoto } from "entities/user/ui"
 
 import { Button } from "shared/ui/button"
@@ -20,24 +21,41 @@ import { Layout } from "widgets/ui/layout"
 
 export const ClientsDetailPage = () => {
   const { id } = useParams()
-  const navigate = useNavigate()
   const [isOpenBlock, setIsOpenBlock] = useState(false)
+  const { data, isLoading } = useQuery({
+    queryKey: ["client", id],
+    queryFn: () => getShopClient(Number(id)),
+    retry: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchInterval: false,
+    enabled: !!id,
+  })
+
+  const user = data?.data?.user
 
   return (
     <Layout>
-      <Container title="Богдан А." withBack className="max-w-[600px]">
+      <Container
+        title={`${user?.first_name} ${user?.last_name}`}
+        withBack
+        className="max-w-[600px]"
+        isLoading={isLoading || !data}
+      >
         <div className="flex w-full">
           <div className="h-full flex flex-col w-full">
             <div className="flex flex-row gap-10 w-full items-center justify-between">
               <div className="flex flex-col">
-                <h1 className="text-2xl">Богдан Аксёнов</h1>
-                <p className="text-slate-500">+7 (926) 777-77-77</p>
+                <h1 className="text-2xl">
+                  {user?.first_name} {user?.last_name}
+                </h1>
+                <p className="text-slate-500">+{user?.phone}</p>
               </div>
-              <UserPhoto />
+              <UserPhoto src={user?.photo} />
             </div>
             <div className="flex flex-row gap-8">
               <div className="flex flex-col">
-                <span className="font-bold text-2xl text-primary">100</span>
+                <span className="font-bold text-2xl text-primary">{data?.data?.balance ?? 0}</span>
                 <span className="text-slate-500">баллов</span>
               </div>
               <div className="flex flex-col">

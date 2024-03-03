@@ -26,8 +26,8 @@ const formSchema = z.object({
     required_error: "Обязательное поле.",
     invalid_type_error: "Обязательное поле.",
   }),
-  short_description: z.string().max(40, { message: "Максимум 40 символов." }),
-  description: z.string().max(100, { message: "Максимум 100 символов." }),
+  short_description: z.string().max(100, { message: "Максимум 100 символов." }),
+  description: z.string().max(500, { message: "Максимум 500 символов." }),
 })
 
 type FormFields = z.infer<typeof formSchema>

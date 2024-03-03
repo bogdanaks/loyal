@@ -3,7 +3,7 @@ import { authApi } from "app/api/utils"
 import { config } from "shared/config"
 
 const api = authApi.extend({
-  prefixUrl: config.apiUrl + "/shop",
+  prefixUrl: config.apiUrl + "/shop-biz",
 })
 
 export const getMyShop = async (): Promise<BaseResponse<Shop>> => await api.get("my").json()
@@ -32,5 +32,8 @@ export const checkPhone = async (payload: string): Promise<BaseResponse<UserAsCl
 export const updateClientBonus = async (data: UpdateClientBonus): Promise<BaseResponse<string>> =>
   await api.post("client-bonus", { json: data }).json()
 
+export const getShopClients = async (): Promise<BaseResponse<ShopClient[]>> =>
+  await api.get("client").json()
+
 export const getShopClient = async (user_id: number): Promise<BaseResponse<ShopClient>> =>
-  await api.get("client", { searchParams: { user_id } }).json()
+  await api.get(`client/${user_id}`).json()
