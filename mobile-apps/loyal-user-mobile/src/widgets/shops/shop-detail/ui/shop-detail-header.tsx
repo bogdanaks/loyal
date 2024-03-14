@@ -1,7 +1,7 @@
 import { useHeaderHeight } from "@react-navigation/elements"
 import { StyleSheet, Text, View } from "react-native"
 
-import { CardIcon } from "shared/assets/icons"
+import { CardIcon } from "shared/assets/icons/card-icon"
 import { useMyTheme } from "shared/hooks/use-my-theme"
 
 interface Props {
@@ -9,21 +9,20 @@ interface Props {
 }
 
 export const ShopDetailHeader = ({ shopClient }: Props) => {
-  const { colors } = useMyTheme()
   const headerHeight = useHeaderHeight()
+  const { colors } = useMyTheme()
 
   return (
     <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        marginTop: headerHeight,
-        paddingHorizontal: 16,
-      }}
+      style={[
+        styles.container,
+        {
+          marginTop: headerHeight,
+        },
+      ]}
     >
-      <View style={{ flexDirection: "column", gap: 2 }}>
-        <Text style={{ fontSize: 40 }}>{shopClient.shop.title}</Text>
+      <View style={styles.containerTitle}>
+        <Text style={{ fontSize: 36 }}>{shopClient.shop.title}</Text>
         <View style={[styles.bonusCounterDiv, { backgroundColor: colors.background }]}>
           <View
             style={{
@@ -45,8 +44,8 @@ export const ShopDetailHeader = ({ shopClient }: Props) => {
           </Text>
         </View>
       </View>
-      <View style={{ flexDirection: "column", gap: 2, alignItems: "flex-end" }}>
-        <Text style={{ fontSize: 40 }}>{shopClient?.balance ?? 0}</Text>
+      <View style={styles.containerPoints}>
+        <Text style={{ fontSize: 36 }}>{shopClient?.balance ?? 0}</Text>
         <Text>баллов</Text>
       </View>
     </View>
@@ -54,6 +53,27 @@ export const ShopDetailHeader = ({ shopClient }: Props) => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    gap: 12,
+  },
+  containerTitle: {
+    flex: 1,
+    flexDirection: "column",
+    gap: 2,
+  },
+  containerPoints: {
+    flex: 0,
+    flexDirection: "column",
+    gap: 2,
+    alignItems: "flex-end",
+    justifyContent: "flex-start",
+    height: "100%",
+  },
   bonusCounterDiv: {
     position: "relative",
     marginTop: "auto",

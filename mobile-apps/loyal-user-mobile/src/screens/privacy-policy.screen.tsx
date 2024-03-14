@@ -1,9 +1,9 @@
 import { StackScreenProps } from "@react-navigation/stack"
-import { SafeAreaView, ScrollView, Text, View } from "react-native"
+import { SafeAreaView, ScrollView, Text } from "react-native"
 
-import { MainStackScreenList } from "./main.screen"
+import { AppStackScreenList } from "app/export-type"
 
-export const PrivacyPolicyScreen = ({ navigation }: StackScreenProps<MainStackScreenList>) => {
+export const PrivacyPolicyScreen = ({ navigation }: StackScreenProps<AppStackScreenList>) => {
   return (
     <SafeAreaView style={{ backgroundColor: "#fff" }}>
       <ScrollView style={{ padding: 16 }}>

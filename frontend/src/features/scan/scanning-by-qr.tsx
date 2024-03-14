@@ -1,6 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { QrCode } from "lucide-react"
-import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 import { checkQrCode } from "entities/shop/api"
@@ -13,35 +12,29 @@ interface Props {
 
 export const ScanningByQr = ({ onSuccess }: Props) => {
   const isTg = !!Telegram.WebApp.initData?.length
-  const [scanResult, setScanResult] = useState<string | null>(null)
-  const { error, data, refetch } = useQuery({
-    queryKey: ["check-qr"],
-    queryFn: () => checkQrCode(scanResult ?? ""),
-    retry: false,
-    enabled: !!scanResult,
-  })
+  const queryClient = useQueryClient()
+
+  const fetchClient = async (code: string) => {
+    try {
+      const res = await queryClient.fetchQuery({
+        queryKey: [],
+        queryFn: () => checkQrCode(code),
+      })
+      onSuccess(res.data)
+    } catch (error) {
+      console.log(error)
+      toast.error("Ошибка сканирования: Клиент не найден")
+    }
+  }
 
   const handleScan = () => {
     Telegram.WebApp.showScanQrPopup({ text: "Сканировать QR" }, (result) => {
-      setScanResult(result)
-      if (data) {
-        refetch()
+      if (result) {
+        fetchClient(result)
       }
       return true
     })
   }
-
-  useEffect(() => {
-    if (error) {
-      toast.error("Ошибка сканирования: Клиент не найден")
-    }
-  }, [error])
-
-  useEffect(() => {
-    if (data) {
-      onSuccess(data.data)
-    }
-  }, [data])
 
   if (!isTg) {
     return null

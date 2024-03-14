@@ -1,5 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
+import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
 import { StatusBar } from "expo-status-bar"
 import IMask from "imask"
 import { useEffect } from "react"
@@ -14,6 +16,8 @@ import { useUserStore } from "entities/user/model/store"
 import { Button, InputField } from "shared/ui"
 
 import { ScreenContainer } from "widgets/ui/screen-container"
+
+dayjs.extend(customParseFormat)
 
 const birthdayMask = IMask.createMask({
   mask: Date,
@@ -50,36 +54,42 @@ export const ProfileDetailScreen = () => {
     defaultValues: {
       first_name: user?.first_name,
       last_name: user?.last_name,
-      birthday: user?.birthday,
+      birthday: user?.birthday
+        ? dayjs(user?.birthday, "YYYY-MM-DD").format("DD.MM.YYYY").toString()
+        : "",
     },
   })
 
   useEffect(() => {
     if (user) {
-      birthdayMask.resolve(user.birthday)
+      const formated = dayjs(user.birthday, "YYYY-MM-DD").format("DD.MM.YYYY").toString()
+      birthdayMask.resolve(formated)
       form.setValue("birthday", birthdayMask.unmaskedValue)
     }
   }, [user])
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
-    mutate(data, {
-      onSuccess: () => {
-        Toast.show({
-          type: "success",
-          text1: "Успешно сохранено!",
-        })
-
-        if (user) {
-          setUser({
-            ...user,
-            first_name: data.first_name,
-            last_name: data.last_name,
-            birthday: data.birthday,
+    mutate(
+      { ...data, birthday: dayjs(data.birthday, "DD.MM.YYYY").format("YYYY-MM-DD").toString() },
+      {
+        onSuccess: () => {
+          Toast.show({
+            type: "success",
+            text1: "Успешно сохранено!",
           })
-        }
-      },
-      onError: () => {},
-    })
+
+          if (user) {
+            setUser({
+              ...user,
+              first_name: data.first_name,
+              last_name: data.last_name,
+              birthday: data.birthday,
+            })
+          }
+        },
+        onError: () => {},
+      }
+    )
   }
 
   return (

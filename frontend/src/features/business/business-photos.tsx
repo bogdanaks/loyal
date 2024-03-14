@@ -1,12 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 
 import { deleteShopPhoto, uploadShopPhoto } from "entities/shop/api"
-import { useShopStore } from "entities/shop/model/store"
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "shared/ui/form"
 import { TelegramButton } from "shared/ui/telegram-button"
@@ -26,7 +25,7 @@ interface Props {
 }
 
 export const BusinessSettingsPhotos = ({ shop }: Props) => {
-  const setShop = useShopStore((state) => state.setShop)
+  const queryClient = useQueryClient()
 
   const form = useForm<FormFields>({
     resolver: zodResolver(formSchema),
@@ -60,7 +59,6 @@ export const BusinessSettingsPhotos = ({ shop }: Props) => {
     const formData = new FormData()
     formData.append("photo", data.photo)
 
-    console.log(data.banners)
     for (const [keyIndex, banner] of Object.entries(data.banners)) {
       if (!banner) {
         continue
@@ -77,9 +75,9 @@ export const BusinessSettingsPhotos = ({ shop }: Props) => {
     }
 
     mutate(formData, {
-      onSuccess: (response) => {
+      onSuccess: () => {
         toast.success("Успешно сохранено!")
-        setShop({ ...shop, photo: response.data.photo, banners: response.data.banners })
+        queryClient.invalidateQueries({ queryKey: ["my-shop"] })
       },
       onError: () => {
         toast.error("Ошибка. Обратитесь в поддержку")
@@ -97,7 +95,7 @@ export const BusinessSettingsPhotos = ({ shop }: Props) => {
         if (findIndex) {
           delete copyShop.banners[findIndex]
         }
-        setShop(copyShop)
+        queryClient.invalidateQueries({ queryKey: ["my-shop"] })
       },
       onError: () => {
         toast.error("Ошибка. Обратитесь в поддержку")

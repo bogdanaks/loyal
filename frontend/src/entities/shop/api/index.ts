@@ -29,11 +29,19 @@ export const checkQrCode = async (payload: string): Promise<BaseResponse<UserAsC
 export const checkPhone = async (payload: string): Promise<BaseResponse<UserAsClient>> =>
   await api.get(`check-phone?payload=${payload}`).json()
 
-export const updateClientBonus = async (data: UpdateClientBonus): Promise<BaseResponse<string>> =>
-  await api.post("client-bonus", { json: data }).json()
+export const updateClientBonusPlus = async (
+  data: UpdateClientBonusPlus
+): Promise<BaseResponse<string>> => await api.post("client-bonus/plus", { json: data }).json()
+
+export const updateClientBonusMinus = async (
+  data: UpdateClientBonusMinus
+): Promise<BaseResponse<string>> => await api.post("client-bonus/minus", { json: data }).json()
 
 export const getShopClients = async (): Promise<BaseResponse<ShopClient[]>> =>
   await api.get("client").json()
 
-export const getShopClient = async (user_id: number): Promise<BaseResponse<ShopClient>> =>
-  await api.get(`client/${user_id}`).json()
+export const getShopClient = async (client_id: number): Promise<BaseResponse<ShopClient>> =>
+  await api.get(`client/${client_id}`).json()
+
+export const getShopClientPurchases = async (client_id: number): Promise<BaseResponse<number>> =>
+  await api.get(`client-purchases/${client_id}`).json()

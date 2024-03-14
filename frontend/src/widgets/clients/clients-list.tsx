@@ -9,9 +9,11 @@ import { Input } from "shared/ui/input"
 import { ScrollArea } from "shared/ui/scroll-area"
 import { Spinner } from "shared/ui/spinner"
 
+import { EmptyData } from "widgets/ui"
+
 export const ClientsList = () => {
   const { data, isLoading } = useQuery({
-    queryKey: ["client"],
+    queryKey: ["clients"],
     queryFn: getShopClients,
     retry: false,
     refetchOnMount: false,
@@ -21,7 +23,10 @@ export const ClientsList = () => {
 
   return (
     <div className="flex flex-col w-full h-full pt-2">
-      <Input placeholder="Поиск" className="mb-4 rounded-3xl bg-primary-foreground border-none" />
+      <Input
+        placeholder="Поиск"
+        className="mb-4 rounded-3xl bg-primary-foreground border-none min-h-10"
+      />
       {isLoading && (
         <div className="flex flex-row items-center justify-center min-h-32">
           <Spinner />
@@ -41,6 +46,7 @@ export const ClientsList = () => {
           ))}
         </ScrollArea>
       )}
+      {!data?.data.length && <EmptyData />}
     </div>
   )
 }

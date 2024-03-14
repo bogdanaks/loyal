@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { useEffect } from "react"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { IMaskInput } from "react-imask"
 import { toast } from "sonner"
@@ -23,11 +23,13 @@ import { TelegramButton } from "shared/ui/telegram-button"
 const formSchema = z.object({
   type_id: z.number(),
   percent_bonus: z.string(),
+  max_off_check_percent: z.string(),
   reg_bonus: z.string(),
 })
 type FormFields = z.infer<typeof formSchema>
 
 export const EditLoyal = () => {
+  const queryClient = useQueryClient()
   const { data: loyalTypes } = useQuery({
     queryKey: ["loyal-types"],
     queryFn: getLoyalTypes,
@@ -52,6 +54,7 @@ export const EditLoyal = () => {
         type_id: loyalProgram.data.loyal_type_id,
         percent_bonus: loyalProgram.data.percent_bonus.toString(),
         reg_bonus: loyalProgram.data.reg_bonus.toString(),
+        max_off_check_percent: loyalProgram.data.max_off_check_percent.toString(),
       })
     }
   }, [loyalProgram])
@@ -61,11 +64,13 @@ export const EditLoyal = () => {
       {
         ...data,
         percent_bonus: Number(data.percent_bonus),
+        max_off_check_percent: Number(data.max_off_check_percent),
         reg_bonus: Number(data.reg_bonus),
       },
       {
         onSuccess: () => {
           toast.success("Успешно сохранено!")
+          queryClient.invalidateQueries({ queryKey: ["my-shop"] })
         },
         onError: () => {
           toast.error("Ошибка. Обратитесь в поддержку")
@@ -73,6 +78,14 @@ export const EditLoyal = () => {
       }
     )
   }
+
+  const activeType = useMemo(() => {
+    if (!loyalTypes) {
+      return undefined
+    }
+
+    return loyalTypes.data.find((type) => type.id === watchType)
+  }, [loyalTypes, watchType])
 
   return (
     <Form {...form}>
@@ -84,8 +97,8 @@ export const EditLoyal = () => {
             <FormItem>
               <FormLabel>Тип программы</FormLabel>
               <FormDescription>
-                <p>Бонусная - баллы за покупки, обмениваются в счёт покупки.</p>
-                <p>Дисконтная - постоянный процент скидки.</p>
+                <p>Бонусная - баллы за покупки, обмениваются в счёт покупки</p>
+                <p>Дисконтная - постоянный процент скидки</p>
               </FormDescription>
               <FormControl>
                 <Select
@@ -114,7 +127,7 @@ export const EditLoyal = () => {
           name="percent_bonus"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Процент скидки/баллов от суммы покупки</FormLabel>
+              <FormLabel>Процент скидки/баллов от суммы чека</FormLabel>
               <FormControl>
                 <IMaskInput
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -129,9 +142,7 @@ export const EditLoyal = () => {
                   from={1}
                   to={99}
                   placeholder="10"
-                  onAccept={(value) => {
-                    field.onChange(value)
-                  }}
+                  onAccept={field.onChange}
                   disabled={!watchType}
                 />
               </FormControl>
@@ -139,6 +150,38 @@ export const EditLoyal = () => {
             </FormItem>
           )}
         />
+        {activeType?.title === "Бонусная" && (
+          <FormField
+            control={form.control}
+            name="max_off_check_percent"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Максимальный процент возможного использования баллов от суммы чека
+                </FormLabel>
+                <FormControl>
+                  <IMaskInput
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    value={field.value?.toString()}
+                    unmask={true}
+                    mask={Number}
+                    normalizeZeros
+                    autofix
+                    name="percent"
+                    maxLength={2}
+                    inputMode="numeric"
+                    from={1}
+                    to={99}
+                    placeholder="10"
+                    onAccept={field.onChange}
+                    disabled={!watchType}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <FormField
           control={form.control}
           name="reg_bonus"

@@ -1,10 +1,8 @@
 import { ScrollArea } from "shared/ui/scroll-area"
 
-import { Layout } from "widgets/ui"
-
 export const UserAgreementPage = () => {
   return (
-    <Layout>
+    <div>
       <h1 className="min-h-12 flex items-center text-3xl font-bold px-4">
         Пользовательское соглашение
       </h1>
@@ -228,6 +226,6 @@ export const UserAgreementPage = () => {
           </ScrollArea>
         </div>
       </div>
-    </Layout>
+    </div>
   )
 }

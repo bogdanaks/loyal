@@ -16,7 +16,7 @@ export class AccountService {
     const salt = await bcrypt.genSalt(10);
     const hashPass = await bcrypt.hash(data.password, salt);
     return await this.accRepository.save({
-      email: data.email,
+      email: data.email.toLowerCase(),
       password: hashPass,
     });
   }

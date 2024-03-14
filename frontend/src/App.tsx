@@ -17,6 +17,8 @@ import { UserAgreementPage } from "pages/user-agreement.page"
 
 import { config } from "shared/config"
 
+import { LayoutWrapper } from "widgets/ui"
+
 function App() {
   return (
     <BrowserRouter>
@@ -28,16 +30,18 @@ function App() {
         <Route path="user-agreement" element={<UserAgreementPage />} />
 
         <Route element={<AuthProvider />}>
-          <Route path="/clients" element={<ClientsPage />} />
-          <Route path="/clients/:id" element={<ClientsDetailPage />} />
-          <Route path="/business" element={<BusinessPage />} />
-          <Route path="/loyal" element={<LoyalPage />} />
-          <Route path="/account-settings" element={<AccountSettingsPage />} />
-          <Route path="/help" element={<HelpPage />} />
-          <Route path="/pay" element={<PayPage />} />
-          <Route path="/scan" element={<ScanPage />} />
+          <Route element={<LayoutWrapper />}>
+            <Route path="/clients" element={<ClientsPage />} />
+            <Route path="/clients/:id" element={<ClientsDetailPage />} />
+            <Route path="/business" element={<BusinessPage />} />
+            <Route path="/loyal" element={<LoyalPage />} />
+            <Route path="/account-settings" element={<AccountSettingsPage />} />
+            <Route path="/help" element={<HelpPage />} />
+            <Route path="/pay" element={<PayPage />} />
+            <Route path="/scan" element={<ScanPage />} />
 
-          <Route path="/account-mobile" element={<AccountMobile />} />
+            <Route path="/account-mobile" element={<AccountMobile />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

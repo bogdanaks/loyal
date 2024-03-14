@@ -90,11 +90,10 @@ export class AuthController {
 
   @Post("account-login")
   async accountLogin(@Body() data: LoginBizDto) {
-    const bizAcc = await this.accountService.findOneAccountBy({ email: data.email });
+    const bizAcc = await this.accountService.findOneAccountBy({ email: data.email.toLowerCase() });
     if (!bizAcc) {
       throw new HttpException("Incorrect data", HttpStatus.BAD_REQUEST);
     }
-
     const match = await bcrypt.compare(data.password, bizAcc.password);
     if (match) {
       const shop = await this.shopService.findOneShopBy({ where: { owner_id: bizAcc.id } });

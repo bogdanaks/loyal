@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useQuery } from "@tanstack/react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { Smartphone } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -24,6 +24,8 @@ interface Props {
 
 export const ScanningByPhone = ({ onSuccess }: Props) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const queryClient = useQueryClient()
 
   const form = useForm<FormFields>({
     resolver: zodResolver(formSchema),
@@ -31,40 +33,31 @@ export const ScanningByPhone = ({ onSuccess }: Props) => {
       phone: undefined,
     },
   })
-  const watchPhone = form.watch("phone")
 
-  const { error, data, refetch, isLoading } = useQuery({
-    queryKey: ["check-phone"],
-    queryFn: () => checkPhone(`7${watchPhone}`),
-    retry: false,
-    enabled: false,
-  })
-
-  const onSubmit = () => {
-    refetch({ cancelRefetch: true })
+  const onSubmit = async (data: FormFields) => {
+    try {
+      setIsLoading(true)
+      const res = await queryClient.fetchQuery({
+        queryKey: [],
+        queryFn: () => checkPhone(data.phone),
+      })
+      form.reset()
+      form.clearErrors()
+      onSuccess(res.data)
+      setIsOpen(false)
+    } catch (error) {
+      console.log(error)
+      toast.error("Ошибка сканирования: Клиент не найден")
+    }
+    setIsLoading(false)
   }
 
   useEffect(() => {
-    if (error) {
-      toast.error("Ошибка сканирования: Клиент не найден")
-    }
-  }, [error])
-
-  useEffect(() => {
-    if (data) {
-      setIsOpen(false)
-      form.reset()
-      form.clearErrors()
-      onSuccess(data.data)
-    }
-  }, [data])
-
-  useEffect(() => {
-    return () => {
+    if (!isOpen) {
       form.clearErrors()
       form.reset()
     }
-  }, [])
+  }, [isOpen])
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -88,7 +81,7 @@ export const ScanningByPhone = ({ onSuccess }: Props) => {
                 <FormControl>
                   <IMaskInput
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    mask="+7 (000) 000-00-00"
+                    mask="+{7} (000) 000-00-00"
                     value={field.value}
                     unmask={true}
                     name="phone"

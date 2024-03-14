@@ -1,14 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useNavigation } from "@react-navigation/native"
 import { useMutation } from "@tanstack/react-query"
-import dayjs from "dayjs"
 import IMask from "imask"
 import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native"
 import * as z from "zod"
-
-import { StackNavigation } from "app/export-type"
 
 import { checkLoginCode, getLoginCode, login } from "entities/auth/api"
 import { useAuthStore } from "entities/auth/model/store"
@@ -20,7 +16,7 @@ import { saveAuthToken } from "shared/libs/storage"
 import { InputField } from "shared/ui"
 
 const phoneMask = IMask.createMask({
-  mask: "+7 (000) 000-00-00",
+  mask: "+{7} (000) 000-00-00",
 })
 
 const otpMask = IMask.createMask({
@@ -49,7 +45,6 @@ export const LoginFormWriteCode = ({ phone, onChangePhone, onRegister }: Props) 
   const [seconds, setSeconds] = useState(59)
   const setIsAuth = useAuthStore((state) => state.setIsAuth)
   const setUser = useUserStore((state) => state.setUser)
-  const navigation = useNavigation<StackNavigation>()
 
   const form = useForm<FormState>({
     resolver: zodResolver(formSchema),
@@ -104,16 +99,12 @@ export const LoginFormWriteCode = ({ phone, onChangePhone, onRegister }: Props) 
         },
         onSuccess: () => {
           mutateLogin(
-            { phone: `7${phone}` },
+            { phone },
             {
               onSuccess: async ({ data }) => {
                 await saveAuthToken(data.token)
-                setUser({
-                  ...data.user,
-                  birthday: dayjs(data.user.birthday, "YYYY.DD.MM").format("DD.MM.YYYY").toString(),
-                })
+                setUser(data.user)
                 setIsAuth(true)
-                navigation.navigate("App")
               },
               onError: () => {
                 onRegister()

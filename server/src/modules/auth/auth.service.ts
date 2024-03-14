@@ -4,6 +4,7 @@ import { totp } from "otplib";
 import { RegisterTelegram } from "./dto/auth-dto";
 import { UserService } from "../user/user.service";
 import { User } from "../user/user.entity";
+import dayjs from "dayjs";
 
 totp.options = { digits: 4, step: 60 };
 
@@ -34,7 +35,7 @@ export class AuthService {
       throw new Error("User not found");
     }
     await this.userService.updateUserByTelegramId(data.tg_user_id, {
-      birthday: data.birthday,
+      birthday: dayjs(data.birthday).toDate(),
       first_name: data.first_name,
       last_name: data.last_name,
       tg_username: data.tg_username,

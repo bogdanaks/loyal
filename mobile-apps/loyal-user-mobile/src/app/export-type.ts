@@ -10,6 +10,8 @@ export type AppStackScreenList = {
   ProfileDetail: undefined
   Feedback: undefined
   AboutApp: undefined
+  AboutAppScreen: undefined
+  UserAgreement: undefined
   Settings: undefined
 }
 export type StackNavigation = NavigationProp<AppStackScreenList>

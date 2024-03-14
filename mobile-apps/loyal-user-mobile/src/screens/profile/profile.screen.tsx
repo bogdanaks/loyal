@@ -9,6 +9,8 @@ import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Dimensions } from "react-native"
 import Toast from "react-native-toast-message"
 
+import { AppStackScreenList } from "app/export-type"
+
 import { useAuthStore } from "entities/auth/model/store"
 
 import { uploadUserPhoto } from "entities/user/api"
@@ -25,19 +27,10 @@ import { AboutAppNavigator } from "./about-app/about-app.navigator"
 import { FeedbackScreen } from "./feedback.screen"
 import { ProfileDetailScreen } from "./profile-detail.screen"
 
-type ProfileStackParamList = {
-  Login: undefined
-  MyProfile: undefined
-  ProfileDetail: undefined
-  Feedback: undefined
-  AboutApp: undefined
-  Settings: undefined
-}
-
 const windowWidth = Dimensions.get("window").width
-const Stack = createStackNavigator<ProfileStackParamList>()
+const Stack = createStackNavigator<AppStackScreenList>()
 
-const ProfileScreenView = ({ navigation }: StackScreenProps<ProfileStackParamList>) => {
+const ProfileScreenView = ({ navigation }: StackScreenProps<AppStackScreenList>) => {
   const { colors } = useMyTheme()
   const setIsAuth = useAuthStore((state) => state.setIsAuth)
   const user = useUserStore((state) => state.user)
@@ -67,7 +60,7 @@ const ProfileScreenView = ({ navigation }: StackScreenProps<ProfileStackParamLis
     setIsReadyPhoto(true)
   }, [user])
 
-  const handlePress = (screen: keyof ProfileStackParamList) => {
+  const handlePress = (screen: keyof AppStackScreenList) => {
     navigation.push(screen)
   }
 

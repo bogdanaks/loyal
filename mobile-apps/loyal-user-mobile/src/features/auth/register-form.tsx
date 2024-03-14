@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useNavigation } from "@react-navigation/native"
 import { useMutation } from "@tanstack/react-query"
-import dayjs from "dayjs"
 import IMask from "imask"
 import { Controller, useForm } from "react-hook-form"
 import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native"
@@ -66,12 +65,8 @@ export const RegisterForm = ({ phone }: Props) => {
         onError: () => {},
         onSuccess: async ({ data }) => {
           await saveAuthToken(data.token)
-          setUser({
-            ...data.user,
-            birthday: dayjs(data.user.birthday, "YYYY.DD.MM").format("DD.MM.YYYY").toString(),
-          })
+          setUser(data.user)
           setIsAuth(true)
-          navigation.navigate("App")
         },
       }
     )

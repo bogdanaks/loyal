@@ -1,4 +1,4 @@
-import { IsNumber } from "class-validator";
+import { IsNumber, IsOptional } from "class-validator";
 
 export class UpdateLoyalDto {
   @IsNumber()
@@ -6,6 +6,10 @@ export class UpdateLoyalDto {
 
   @IsNumber()
   percent_bonus: number;
+
+  @IsOptional()
+  @IsNumber()
+  max_off_check_percent?: number;
 
   @IsNumber()
   reg_bonus: number;

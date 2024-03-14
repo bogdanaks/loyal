@@ -1,8 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
-import { useEffect } from "react"
-
-import { getMyShop } from "entities/shop/api"
 import { useShopStore } from "entities/shop/model/store"
+import { ShopPreview } from "entities/shop/ui"
 
 import { Button } from "shared/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "shared/ui/sheet"
@@ -15,20 +12,6 @@ import { BusinessSettingsWorkingHours } from "./business-working-hours"
 
 export const BusinessSettings = () => {
   const shop = useShopStore((state) => state.shop)
-  const setShop = useShopStore((state) => state.setShop)
-  const { data } = useQuery({
-    queryKey: ["my-shop"],
-    queryFn: getMyShop,
-    retry: 1,
-  })
-
-  useEffect(() => {
-    if (!data) {
-      return
-    }
-
-    setShop(data.data)
-  }, [data])
 
   if (!shop) {
     return null
@@ -73,10 +56,10 @@ export const BusinessSettings = () => {
               </Button>
             </SheetTrigger>
             <SheetContent className="sm:max-w-md max-[500px]:w-[100vw] px-0">
-              <SheetHeader className="px-5">
+              <SheetHeader className="px-5 pb-4">
                 <SheetTitle>Предпросмотр магазина</SheetTitle>
               </SheetHeader>
-              <div className="mt-6 h-full bg-red-200">Карточка магазина</div>
+              <ShopPreview />
             </SheetContent>
           </Sheet>
         </TabsList>

@@ -12,8 +12,6 @@ import QuestionIcon from "shared/assets/icons/question.svg?react"
 import TicketIcon from "shared/assets/icons/ticket.svg?react"
 import { removeAuthToken } from "shared/libs/ls"
 
-import { Layout } from "widgets/ui"
-
 export const AccountMobile = () => {
   const account = useAccountStore((state) => state.account)
   const setIsAuth = useAuthStore((store) => store.setIsAuth)
@@ -24,7 +22,7 @@ export const AccountMobile = () => {
   }
 
   return (
-    <Layout>
+    <div>
       <div className="p-5 h-full flex flex-col">
         <div className="flex flex-row items-center justify-between">
           <h1 className="text-3xl font-medium">
@@ -82,6 +80,6 @@ export const AccountMobile = () => {
           <span>Выйти</span>
         </li>
       </div>
-    </Layout>
+    </div>
   )
 }

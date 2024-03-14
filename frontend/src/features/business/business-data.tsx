@@ -1,11 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 
 import { getShopStatuses, getShopTypes, updateShop } from "entities/shop/api"
-import { useShopStore } from "entities/shop/model/store"
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "shared/ui/form"
 import { Input } from "shared/ui/input"
@@ -37,7 +36,7 @@ interface Props {
 }
 
 export const BusinessSettingsData = ({ shop }: Props) => {
-  const setShop = useShopStore((state) => state.setShop)
+  const queryClient = useQueryClient()
 
   const { data: shopStatuses } = useQuery({
     queryKey: ["shop-statuses"],
@@ -68,7 +67,7 @@ export const BusinessSettingsData = ({ shop }: Props) => {
     mutate(data, {
       onSuccess: () => {
         toast.success("Успешно сохранено!")
-        setShop({ ...shop, ...data })
+        queryClient.invalidateQueries({ queryKey: ["my-shop"] })
       },
       onError: () => {
         toast.error("Ошибка. Обратитесь в поддержку")

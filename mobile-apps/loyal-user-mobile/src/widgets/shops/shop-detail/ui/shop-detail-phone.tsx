@@ -32,7 +32,7 @@ export const ShopDetailPhone = ({ shopClient }: Props) => {
           color: colors.mutedForeground,
         }}
       >
-        +7{shopClient.shop.phone}
+        {shopClient.shop.phone}
       </Text>
     </View>
   )

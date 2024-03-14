@@ -18,7 +18,7 @@ export class User {
   tg_username: string;
 
   @Column({ type: "date" })
-  birthday: string;
+  birthday: Date;
 
   @Column()
   email: string;

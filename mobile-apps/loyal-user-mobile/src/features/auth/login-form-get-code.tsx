@@ -15,7 +15,7 @@ interface FormState {
 }
 
 const phoneMask = IMask.createMask({
-  mask: "+7 (000) 000-00-00",
+  mask: "+{7} (000) 000-00-00",
 })
 
 const formSchema = z.object({

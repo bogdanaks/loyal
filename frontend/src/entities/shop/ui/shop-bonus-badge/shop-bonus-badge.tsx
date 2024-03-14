@@ -1,10 +1,15 @@
-import styles from "./styles.module.css";
+import styles from "./styles.module.css"
 
-export const ShopBonusBadge = () => {
+interface Props {
+  icon: React.ReactNode
+  text: string
+}
+
+export const ShopBonusBadge = ({ icon, text }: Props) => {
   return (
     <div className={styles.infoBonus}>
-      <button className={styles.badge}>от 10%</button>
-      <button className={styles.badge}>110</button>
+      <button className={styles.icon}>{icon}</button>
+      <button className={styles.badge}>{text}</button>
     </div>
-  );
-};
+  )
+}

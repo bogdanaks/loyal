@@ -10,6 +10,7 @@ import {
   Post,
   Query,
   Request,
+  UploadedFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -17,9 +18,13 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { ShopService } from "./shop.service";
 import { AuthRequest, JwtAccountGuard } from "../auth/jwt-account.guard";
-import { FileFieldsInterceptor } from "@nestjs/platform-express";
+import { FileFieldsInterceptor, FileInterceptor } from "@nestjs/platform-express";
 import * as sharp from "sharp";
-import { UpdateClientBonusDto, UpdateMyShopDataDto } from "./dto/shop.dto";
+import {
+  UpdateClientBonusMinusDto,
+  UpdateClientBonusPlusDto,
+  UpdateMyShopDataDto,
+} from "./dto/shop.dto";
 import { mkdirp } from "mkdirp";
 import * as fs from "node:fs";
 import { UserService } from "../user/user.service";
@@ -52,7 +57,7 @@ export class ShopBizController {
 
     const shop = await this.shopService.findOneShopBy({
       where: { owner_id: bizId },
-      relations: ["loyal_program"],
+      relations: { loyal_program: { loyal_type: true }, type: true },
     });
     return { data: shop };
   }
@@ -90,7 +95,7 @@ export class ShopBizController {
     ])
   )
   @Post("photos")
-  async updateMyShop(
+  async updateMyShopPhotos(
     @Request() req: AuthRequest,
     @UploadedFiles() files: { photo: Express.Multer.File[]; banners: Express.Multer.File[] }
   ) {
@@ -133,7 +138,6 @@ export class ShopBizController {
         mkdirp.sync(dirName);
       }
 
-      console.log(files.banners);
       for await (const banner of files.banners) {
         const bannerData = new URLSearchParams(banner.originalname);
         const bannerIndex = bannerData.get("index");
@@ -167,6 +171,95 @@ export class ShopBizController {
   }
 
   @UseGuards(JwtAccountGuard)
+  @UseInterceptors(FileInterceptor("shopAvatar"))
+  @Post("shop-avatar")
+  async updateMyShopAvatar(@Request() req: AuthRequest, @UploadedFile() file: Express.Multer.File) {
+    const { accId } = req.user;
+    if (!accId) {
+      throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
+    }
+
+    const findShop = await this.shopService.findOneShopBy({ where: { owner_id: accId } });
+    if (!findShop) {
+      throw new HttpException("Shop not found", HttpStatus.NOT_FOUND);
+    }
+
+    const dirName = `${this.configService.get("staticPath")}/shops/${findShop.id}`;
+    const photoUrl = `${uuidv4()}.webp`;
+
+    if (!fs.existsSync(dirName)) {
+      mkdirp.sync(dirName);
+    }
+
+    if (findShop.photo) {
+      fs.unlinkSync(`${dirName}/${findShop.photo}`);
+    }
+
+    try {
+      await sharp(file.buffer)
+        .resize(200, 200)
+        .webp({ quality: 100 })
+        .toFile(`${dirName}/${photoUrl}`);
+    } catch (e) {
+      throw new HttpException("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    await this.shopService.updateShop(findShop.id, {
+      photo: photoUrl.length ? photoUrl : findShop.photo,
+    });
+    const findUpdatedShop = await this.shopService.findOneShopBy({ where: { id: findShop.id } });
+    return { data: findUpdatedShop };
+  }
+
+  @UseGuards(JwtAccountGuard)
+  @UseInterceptors(FileInterceptor("banner"))
+  @Post("banner")
+  async updateMyShopBanner(@Request() req: AuthRequest, @UploadedFile() file: Express.Multer.File) {
+    const { accId } = req.user;
+    if (!accId) {
+      throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
+    }
+
+    const findShop = await this.shopService.findOneShopBy({ where: { owner_id: accId } });
+    if (!findShop) {
+      throw new HttpException("Shop not found", HttpStatus.NOT_FOUND);
+    }
+
+    const dirName = `${this.configService.get("staticPath")}/shops/${findShop.id}`;
+    const bannersUrls = findShop.banners ?? {};
+    if (!fs.existsSync(dirName)) {
+      mkdirp.sync(dirName);
+    }
+
+    const bannerData = new URLSearchParams(file.originalname);
+    const bannerIndex = bannerData.get("index");
+    const bannerName = bannerData.get("name");
+
+    if (bannerName !== "null") {
+      fs.unlinkSync(`${dirName}/${bannerName}`);
+    }
+
+    try {
+      const bannerId = uuidv4();
+      await sharp(file.buffer)
+        .resize(400, 200, {
+          fit: "inside",
+        })
+        .webp({ quality: 100 })
+        .toFile(`${dirName}/${bannerId}.webp`);
+      bannersUrls[bannerIndex] = `${bannerId}.webp`;
+    } catch (e) {
+      throw new HttpException("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    await this.shopService.updateShop(findShop.id, {
+      banners: bannersUrls,
+    });
+    const findUpdatedShop = await this.shopService.findOneShopBy({ where: { id: findShop.id } });
+    return { data: findUpdatedShop };
+  }
+
+  @UseGuards(JwtAccountGuard)
   @Delete("photos")
   async deletePhoto(@Request() req: AuthRequest, @Query() query: { id: string }) {
     if (!query.id) {
@@ -185,7 +278,6 @@ export class ShopBizController {
 
     const dirName = `${this.configService.get("staticPath")}/shops/${findShop.id}`;
     fs.unlinkSync(`${dirName}/${query.id}`);
-
     const bannersUrls = findShop.banners ?? {};
     const findIndex = Object.keys(bannersUrls).find((key) => bannersUrls[key] === query.id);
     delete bannersUrls[findIndex];
@@ -264,18 +356,39 @@ export class ShopBizController {
       where: { id },
       relations: { user: true },
     });
-    // const transactions // TODO count of transactions
 
     return {
-      data: {
-        ...client,
-      },
+      data: client,
     };
   }
 
   @UseGuards(JwtAccountGuard)
-  @Post("client-bonus")
-  async updateClientBonus(@Request() req: AuthRequest, @Body() data: UpdateClientBonusDto) {
+  @Get("client-purchases/:id")
+  async getShopClientTransactions(@Request() req: AuthRequest, @Param("id") id: number) {
+    const { accId } = req.user;
+    if (!accId) {
+      throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
+    }
+
+    const client = await this.shopService.findOneClientBy({
+      where: { id },
+    });
+    if (!client) {
+      throw new HttpException("Client not found", HttpStatus.NOT_FOUND);
+    }
+
+    const transaction = await this.transactionService.getTransactions({
+      where: { user_id: client.user_id, is_accrual: true },
+    });
+
+    return {
+      data: transaction.length,
+    };
+  }
+
+  @UseGuards(JwtAccountGuard)
+  @Post("client-bonus/plus")
+  async updateClientBonus(@Request() req: AuthRequest, @Body() data: UpdateClientBonusPlusDto) {
     const { accId } = req.user;
     if (!accId) {
       throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
@@ -295,12 +408,76 @@ export class ShopBizController {
     }
 
     try {
-      await this.transactionService.create({
-        loyalty_program: shop.loyal_program,
-        user_id: user.id,
-        shop_id: shop.id,
-        ...data,
-      });
+      switch (shop.loyal_program.loyal_type.title) {
+        case "Бонусная":
+          await this.transactionService.createPlusBonus({
+            loyalty_program: shop.loyal_program,
+            user_id: user.id,
+            shop_id: shop.id,
+            ...data,
+          });
+          break;
+        case "Дисконтная":
+          await this.transactionService.createPlusDiscount({
+            loyalty_program: shop.loyal_program,
+            user_id: user.id,
+            shop_id: shop.id,
+            ...data,
+          });
+          break;
+
+        default:
+          throw new HttpException("Loyal type not found", HttpStatus.NOT_FOUND);
+      }
+
+      return {
+        data: "success",
+      };
+    } catch (err) {
+      throw new HttpException("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @UseGuards(JwtAccountGuard)
+  @Post("client-bonus/minus")
+  async updateClientBonusMinus(
+    @Request() req: AuthRequest,
+    @Body() data: UpdateClientBonusMinusDto
+  ) {
+    const { accId } = req.user;
+    if (!accId) {
+      throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
+    }
+
+    const user = await this.userService.findOneBy({ id: data.user_id });
+    if (!user) {
+      throw new HttpException("User not found", HttpStatus.NOT_FOUND);
+    }
+
+    const shop = await this.shopService.findOneShopBy({
+      where: { owner_id: accId },
+      relations: { loyal_program: { loyal_type: true } },
+    });
+    if (!shop || !shop.loyal_program) {
+      throw new HttpException("Shop or loyal not found", HttpStatus.NOT_FOUND);
+    }
+
+    try {
+      switch (shop.loyal_program.loyal_type.title) {
+        case "Бонусная":
+          await this.transactionService.createMinusBonus({
+            loyalty_program: shop.loyal_program,
+            user_id: user.id,
+            shop_id: shop.id,
+            ...data,
+          });
+          break;
+        case "Дисконтная":
+          throw new HttpException("Loyal type discount", HttpStatus.BAD_REQUEST);
+
+        default:
+          throw new HttpException("Loyal type not found", HttpStatus.NOT_FOUND);
+      }
 
       return {
         data: "success",

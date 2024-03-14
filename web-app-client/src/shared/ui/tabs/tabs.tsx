@@ -1,15 +1,15 @@
-import { cn } from "shared/libs/utils";
+import { cn } from "shared/libs/utils"
 
 interface Props {
-  items: { key: string; value: string; icon: React.ReactNode }[];
-  activeKey: string;
-  onClick: (tab: string) => void;
+  items: { key: string; value: string; icon?: React.ReactNode }[]
+  activeKey: string
+  onClick: (tab: string) => void
 }
 
 interface TabItemProps {
-  isActive: boolean;
-  value: string;
-  onClick: () => void;
+  isActive: boolean
+  value: string
+  onClick: () => void
 }
 
 const TabItem = ({ value, isActive, onClick }: TabItemProps) => {
@@ -23,8 +23,8 @@ const TabItem = ({ value, isActive, onClick }: TabItemProps) => {
     >
       <span className="opacity-50">{value}</span>
     </li>
-  );
-};
+  )
+}
 
 export const Tabs = ({ items, activeKey, onClick }: Props) => {
   return (
@@ -37,8 +37,8 @@ export const Tabs = ({ items, activeKey, onClick }: Props) => {
             onClick={() => onClick(item.key)}
             isActive={activeKey === item.key}
           />
-        );
+        )
       })}
     </ul>
-  );
-};
+  )
+}

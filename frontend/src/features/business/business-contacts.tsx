@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { IMaskInput } from "react-imask"
@@ -9,7 +9,6 @@ import * as z from "zod"
 
 import { getAddressSuggestion } from "entities/dadata/api"
 import { updateShop } from "entities/shop/api"
-import { useShopStore } from "entities/shop/model/store"
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "shared/ui/form"
 import { Input } from "shared/ui/input"
@@ -28,7 +27,7 @@ interface Props {
 
 export const BusinessSettingsContacts = ({ shop }: Props) => {
   const [isVisibleSuggestion, setIsVisibleSuggestion] = useState(false)
-  const setShop = useShopStore((state) => state.setShop)
+  const queryClient = useQueryClient()
 
   const form = useForm<FormFields>({
     resolver: zodResolver(formSchema),
@@ -53,7 +52,7 @@ export const BusinessSettingsContacts = ({ shop }: Props) => {
     mutate(data, {
       onSuccess: () => {
         toast.success("Успешно сохранено!")
-        setShop({ ...shop, ...data })
+        queryClient.invalidateQueries({ queryKey: ["my-shop"] })
       },
       onError: () => {
         toast.error("Ошибка. Обратитесь в поддержку")

@@ -70,6 +70,7 @@ export class LoyalController {
       const loyalProgram = await this.loyalService.insert({
         loyal_type_id: data.type_id,
         percent_bonus: data.percent_bonus,
+        max_off_check_percent: data.max_off_check_percent,
         reg_bonus: data.reg_bonus,
       });
       await this.shopService.updateShop(shop.id, { loyal_program_id: loyalProgram.id });
@@ -77,6 +78,7 @@ export class LoyalController {
       await this.loyalService.update(shop.loyal_program_id, {
         loyal_type_id: data.type_id,
         percent_bonus: data.percent_bonus,
+        max_off_check_percent: data.max_off_check_percent,
         reg_bonus: data.reg_bonus,
       });
     }

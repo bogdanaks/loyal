@@ -1,12 +1,4 @@
-import {
-  IsString,
-  MinLength,
-  MaxLength,
-  IsOptional,
-  IsNumber,
-  IsObject,
-  IsBoolean,
-} from "class-validator";
+import { IsString, MinLength, MaxLength, IsOptional, IsNumber, IsObject } from "class-validator";
 import { WorkingHours } from "../interfaces";
 
 export class UpdateMyShopDataDto {
@@ -39,19 +31,23 @@ export class UpdateMyShopDataDto {
   working_hours: WorkingHours;
 }
 
-export class UpdateClientBonusDto {
+export class UpdateClientBonusPlusDto {
   @IsNumber()
   check_amount: number;
 
-  @IsBoolean()
-  is_accrual: boolean;
+  @IsNumber()
+  user_id: number;
+}
+
+export class UpdateClientBonusMinusDto {
+  @IsNumber()
+  check_amount: number;
+
+  @IsNumber()
+  point_amount: number;
 
   @IsNumber()
   user_id: number;
-
-  @IsOptional()
-  @IsNumber()
-  point_amount: number;
 }
 
 export class TypeIdDto {

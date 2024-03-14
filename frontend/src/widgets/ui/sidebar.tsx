@@ -1,7 +1,7 @@
 import {
+  Bitcoin,
   Briefcase,
   ChevronLeft,
-  Facebook,
   HelpCircle,
   LogOut,
   QrCode,
@@ -125,7 +125,7 @@ export const Sidebar = () => {
         >
           <h2 className="min-h-12 flex items-center text-3xl font-bold text-nowrap delay-200 gap-2">
             <span className="min-w-[48px] flex items-center justify-center">
-              <Facebook size={30} />
+              <Bitcoin size={30} />
             </span>
             <span
               className={cn("delay-100 transition-all", {
@@ -133,7 +133,7 @@ export const Sidebar = () => {
                 "opacity-0": collapsed,
               })}
             >
-              NAME
+              Баллами
             </span>
           </h2>
           <ul className="flex flex-col mt-4 gap-2 font-medium text-sm h-full text-slate-600">
