@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import dayjs from "dayjs"
-import customParseFormat from "dayjs/plugin/customParseFormat"
 import { Stack } from "expo-router"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import { StyleSheet, View } from "react-native"
@@ -16,8 +15,6 @@ import { theme } from "shared/config/theme"
 import { showSuccess } from "shared/libs/toast-utils"
 import { Button } from "shared/ui/button"
 import { InputField, InputImaskField } from "shared/ui/form-fields"
-
-dayjs.extend(customParseFormat)
 
 const formSchema = z.object({
   first_name: z

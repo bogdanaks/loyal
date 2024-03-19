@@ -1,5 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+import timezone from "dayjs/plugin/timezone"
+import utc from "dayjs/plugin/utc"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Pressable, StyleSheet, Text, View } from "react-native"
@@ -18,6 +22,10 @@ import { theme } from "shared/config/theme"
 import { showError, showSuccess } from "shared/libs/toast-utils"
 import { Button } from "shared/ui/button"
 import { InputImask } from "shared/ui/input-imask"
+
+dayjs.extend(customParseFormat)
+dayjs.extend(timezone)
+dayjs.extend(utc)
 
 const DAYS = {
   monday: "ПН",
@@ -161,15 +169,18 @@ export const BusinessSettingsWorkingHours = () => {
   }
 
   const onSubmit = (data: FormFields) => {
-    mutate(data, {
-      onSuccess: () => {
-        showSuccess()
-        queryClient.invalidateQueries({ queryKey: ["my-shop"] })
-      },
-      onError: () => {
-        showError()
-      },
-    })
+    mutate(
+      { ...data, timezone: dayjs.tz.guess() },
+      {
+        onSuccess: () => {
+          showSuccess()
+          queryClient.invalidateQueries({ queryKey: ["my-shop"] })
+        },
+        onError: () => {
+          showError()
+        },
+      }
+    )
   }
 
   useEffect(() => {

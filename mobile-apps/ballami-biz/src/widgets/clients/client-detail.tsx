@@ -90,7 +90,7 @@ export const ClientDetail = ({ id }: Props) => {
       </View>
       <Image
         style={styles.image}
-        source={`${config.apiDomain}/static/${data.data.user.photo}`}
+        source={`${config.apiDomain}/static/users/${data.data.user.photo}`}
         contentFit="cover"
         transition={100}
       />

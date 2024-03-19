@@ -1,0 +1,21 @@
+---
+import Layout from "../widgets/ui/layout.astro"
+import Button from "../shared/ui/button.astro"
+---
+
+<Layout title="Помощь">
+  <main class="flex items-center justify-center mt-8 px-4">
+    <div class="max-w-[1040px] bg-muted rounded-3xl px-4 py-8 w-full">
+      <div class="max-w-[600px]">
+        <h1 class="text-2xl font-semibold mb-5">Помощь</h1>
+        <p class="mb-2">
+          Если вы столкнулись с проблемой или у вас есть советы по улучшению сервиса, напишите нам!
+        </p>
+        <textarea
+          class="w-full min-h-40 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        ></textarea>
+        <Button id="awd" text="Отправить" class="mt-2" />
+      </div>
+    </div>
+  </main>
+</Layout>

@@ -1,0 +1,24 @@
+---
+import Layout from "widgets/ui/layout.astro"
+import MainHeader from "widgets/main/main-header.astro"
+import MainBenefits from "widgets/main/main-benefits.astro"
+import MainFeatures from "widgets/main/main-features.astro"
+import MainProof from "widgets/main/main-proof.astro"
+import MainFaq from "widgets/main/main-faq.astro"
+import MainAdditional from "widgets/main/main-additional.astro"
+import MainMobileApps from "widgets/main/main-mobile-apps.astro"
+---
+
+<Layout title="Баллами - готовая программа лояльности для бизнеса" isIndex>
+  <main class="flex items-center justify-center">
+    <div class="max-w-[1040px] px-4 flex flex-col gap-20">
+      <MainHeader />
+      <MainBenefits />
+      <MainFeatures />
+      <MainProof />
+      <MainFaq />
+      <MainMobileApps />
+      <MainAdditional />
+    </div>
+  </main>
+</Layout>

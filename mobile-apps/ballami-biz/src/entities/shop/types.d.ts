@@ -13,6 +13,7 @@ interface Shop {
   banners: Record<string, string>
   phone: string
   address: string
+  timezone: string
   created_at: string
   updated_at: string
 }

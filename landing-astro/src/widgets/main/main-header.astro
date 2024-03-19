@@ -1,0 +1,25 @@
+---
+import { Image } from "astro:assets"
+import StockImg from "shared/assets/stock.svg"
+import MadeInRussia from "shared/assets/icons/made-in-russia.svg"
+
+import ActionButton from "./action-button.astro"
+---
+
+<section class="py-8 flex flex-row items-center justify-between mt-12">
+  <section class="flex flex-col max-w-[60%]">
+    <h1 class="mb-4 text-6xl font-semibold">Программа лояльности</h1>
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam totam suscipit soluta! Lorem
+      ipsum dolor sit amet, consectetur adipisicing elit. Autem facere reprehenderit magnam nulla
+      asperiores et laborum hic repellendus saepe blanditiis?
+    </p>
+    <div class="mt-8"><ActionButton /></div>
+    <div class="mt-5">
+      <Image src={MadeInRussia} alt="Сделано в России" height={40} loading="eager" />
+    </div>
+  </section>
+  <section class="w-[200px] h-[200px]">
+    <Image src={StockImg} alt="Benefit 3" loading="eager" />
+  </section>
+</section>

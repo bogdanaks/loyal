@@ -1,0 +1,16 @@
+---
+import { Image } from "astro:assets"
+import TgIcon from "shared/assets/icons/telegram.svg"
+import VkIcon from "shared/assets/icons/vk.svg"
+---
+
+<ul class="flex flex-row items-center gap-8">
+  <li class="flex flex-row gap-4">
+    <a href="">
+      <Image src={TgIcon} alt="Telegram" width={26} height={26} loading="eager" />
+    </a>
+    <a href="">
+      <Image src={VkIcon} alt="VK" width={26} height={26} loading="eager" />
+    </a>
+  </li>
+</ul>

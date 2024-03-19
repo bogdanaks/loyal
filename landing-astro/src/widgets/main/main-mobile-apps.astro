@@ -1,0 +1,24 @@
+---
+import { Image } from "astro:assets"
+import MobileApp from "shared/assets/mobile-app.webp"
+import AppStoreIcon from "shared/assets/icons/app-store-badge.svg"
+import GooglePlayStoreIcon from "shared/assets/icons/google-play-badge.svg"
+---
+
+<section class="py-8 flex flex-row gap-10 bg-muted rounded-xl">
+  <div class="bg-gray-100 rounded-3xl flex"><Image src={MobileApp} alt="Arrow" /></div>
+  <div class="flex flex-col">
+    <h3 class="text-2xl font-semibold mb-2">Мобильное приложение для управления</h3>
+    <p>Управляйте своим бизнесом через мобильное приложение</p>
+    <ul class="mt-4 flex flex-wrap gap-4">
+      <li class="bg-background p-4 rounded-2xl">Просмотр клиентов</li>
+      <li class="bg-background p-4 rounded-2xl">Сканирование QR</li>
+      <li class="bg-background p-4 rounded-2xl">Настройка программы лояльности</li>
+      <li class="bg-background p-4 rounded-2xl">Настройка бизнеса</li>
+    </ul>
+    <ul class="flex flex-row gap-4 mt-auto">
+      <li><Image src={AppStoreIcon} alt="App store" /></li>
+      <li><Image src={GooglePlayStoreIcon} alt="Google play store" /></li>
+    </ul>
+  </div>
+</section>

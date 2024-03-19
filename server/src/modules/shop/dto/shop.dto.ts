@@ -29,6 +29,10 @@ export class UpdateMyShopDataDto {
   @IsOptional()
   @IsObject()
   working_hours: WorkingHours;
+
+  @IsOptional()
+  @IsString()
+  timezone: string;
 }
 
 export class UpdateClientBonusPlusDto {

@@ -13,6 +13,7 @@ interface Shop {
   banners: Record<string, string>
   phone: string
   address: string
+  timezone: string
   created_at: string
   updated_at: string
 }
@@ -45,10 +46,13 @@ interface ShopClient {
 }
 
 interface WorkingHours {
-  common: WorkingTimeWithDays
-  by_days: {
-    [day: string]: WorkingTimeDay
-  }
+  monday: WorkingTimeDay
+  tuesday: WorkingTimeDay
+  wednesday: WorkingTimeDay
+  thursday: WorkingTimeDay
+  friday: WorkingTimeDay
+  saturday: WorkingTimeDay
+  sunday: WorkingTimeDay
 }
 
 interface WorkingTimeWithDays extends WorkingTimeDay {
@@ -58,6 +62,11 @@ interface WorkingTimeWithDays extends WorkingTimeDay {
 interface WorkingTimeDay {
   opening_time: string
   closing_time: string
-  breaks_time_from: string
-  breaks_time_to: string
+  is_day_off: boolean
+  breaks: WorkingTimeBreak[]
+}
+
+interface WorkingTimeBreak {
+  from_time: string
+  to_time: string
 }

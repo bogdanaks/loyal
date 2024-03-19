@@ -1,0 +1,24 @@
+---
+import { Image } from "astro:assets"
+import StockImg from "shared/assets/stock.svg"
+---
+
+<section class="py-8 bg-gray-100 rounded-xl">
+  <ul class="flex flex-row items-center justify-around">
+    <li class="flex flex-col items-center gap-5">
+      <h3 class="font-semibold text-lg">Benefit 1</h3>
+      <div class="w-60%"><Image src={StockImg} alt="Benefit 1" loading="eager" /></div>
+      <p>Lorem ipsum dolor sit amet.</p>
+    </li>
+    <li class="flex flex-col items-center gap-5">
+      <h3 class="font-semibold text-lg">Benefit 2</h3>
+      <div class="w-60%"><Image src={StockImg} alt="Benefit 2" loading="eager" /></div>
+      <p>Lorem ipsum dolor sit amet.</p>
+    </li>
+    <li class="flex flex-col items-center gap-5">
+      <h3 class="font-semibold text-lg">Benefit 3</h3>
+      <div class="w-60%"><Image src={StockImg} alt="Benefit 3" loading="eager" /></div>
+      <p>Lorem ipsum dolor sit amet.</p>
+    </li>
+  </ul>
+</section>

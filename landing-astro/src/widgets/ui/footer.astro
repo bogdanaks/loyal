@@ -1,0 +1,46 @@
+---
+import { Image } from "astro:assets"
+import SocialLinks from "widgets/social-links.astro"
+import MadeInRussia from "shared/assets/icons/made-in-russia.svg"
+---
+
+<footer class="w-full flex items-center justify-center mt-auto">
+  <div class="max-w-[1040px] w-full flex flex-col items-center justify-center py-8 px-4">
+    <nav class="py-4 w-full border-b-2 border-b-slate-100">
+      <ul class="flex flex-row items-center gap-8 text-sm text-muted-foreground">
+        <li><a href="/price" class="hover:text-gray-400/90 transition-colors">Тарифы</a></li>
+        <li><a href="/contacts" class="hover:text-gray-400/90 transition-colors">Контакты</a></li>
+        <li><a href="/help" class="hover:text-gray-400/90 transition-colors">Помощь</a></li>
+        <li>
+          <a href="/legal" class="hover:text-gray-400/90 transition-colors"
+            >Юридическая информация</a
+          >
+        </li>
+        <li class="ml-auto text-primary">
+          <a href="/mobile-apps" class="hover:text-blue-400/90 transition-colors"
+            >Мобильное приложение</a
+          >
+        </li>
+      </ul>
+    </nav>
+    <nav class="pt-4 pb-2 w-full flex flex-row items-center justify-between">
+      <span class="font-semibold text-sm">Баллами © 2024</span>
+      <SocialLinks />
+    </nav>
+    <nav class="w-full">
+      <ul class="flex flex-row items-center justify-between text-xs">
+        <li>
+          <Image src={MadeInRussia} alt="Сделано в России" height={40} loading="eager" />
+        </li>
+        <li class="ml-auto mr-4"><span>info@ballami.ru</span></li>
+        <li>
+          <a
+            href="/legal/privacy-policy"
+            class="text-muted-foreground hover:text-gray-400/90 transition-colors"
+            >Политика конфиденциальности</a
+          >
+        </li>
+      </ul>
+    </nav>
+  </div>
+</footer>

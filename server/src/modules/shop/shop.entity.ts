@@ -76,6 +76,9 @@ export class Shop {
   @Column({ type: "character varying", length: 100 })
   address: string;
 
+  @Column({ type: "character varying", length: 20 })
+  timezone: string;
+
   @CreateDateColumn({ type: "time with time zone" })
   created_at: Date;
 

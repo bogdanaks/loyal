@@ -35,7 +35,7 @@ export const ShopDetail = ({ shopClient }: Props) => {
         ]}
       >
         <ShopDetailPhoto shopClient={shopClient} />
-        <ShopDetailWorkingHours />
+        <ShopDetailWorkingHours shopClient={shopClient} />
         <ShopDetailBanners shopClient={shopClient} />
         <ShopDetailDescription shopClient={shopClient} />
         <ShopDetailPhone shopClient={shopClient} />

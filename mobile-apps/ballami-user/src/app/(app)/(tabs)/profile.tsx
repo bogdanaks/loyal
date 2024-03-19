@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
 import { Link } from "expo-router"
@@ -26,8 +26,8 @@ const windowWidth = Dimensions.get("window").width
 export default function ProfilePage() {
   const setIsAuth = useAuthStore((state) => state.setIsAuth)
   const user = useUserStore((state) => state.user)
-  const setUser = useUserStore((state) => state.setUser)
   const { top } = useSafeAreaInsets()
+  const queryClient = useQueryClient()
 
   const mutationPhoto = useMutation({
     mutationFn: uploadUserPhoto,
@@ -58,14 +58,14 @@ export default function ProfilePage() {
 
         formData.append("photo", {
           uri: newPhoto.uri,
-          name: user.id.toString(),
+          name: user.photo ?? "null",
           type: newPhoto.mimeType,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any)
         mutationPhoto.mutate(formData, {
           onSuccess: () => {
             showSuccess()
-            setUser({ ...user, photo: `${user.id}.webp` })
+            queryClient.invalidateQueries({ queryKey: ["user-me"], type: "all" })
           },
           onError: () => {
             showError()
@@ -97,7 +97,7 @@ export default function ProfilePage() {
               source={{
                 height: 100,
                 width: 100,
-                uri: `${config.apiDomain}/static/${user?.photo}`,
+                uri: `${config.apiDomain}/static/users/${user?.photo}`,
               }}
               contentFit="cover"
               cachePolicy="disk"

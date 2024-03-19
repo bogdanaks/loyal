@@ -16,6 +16,9 @@ import { AuthRequest, JwtGuard } from "../auth/jwt.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { User } from "./user.entity";
 import * as sharp from "sharp";
+import * as fs from "node:fs";
+import { mkdirp } from "mkdirp";
+import { v4 as uuidv4 } from "uuid";
 
 @Controller({ path: "user" })
 export class UserController {
@@ -48,22 +51,33 @@ export class UserController {
   @UseInterceptors(FileInterceptor("photo"))
   @Patch("photo")
   async updatePhoto(@Request() req: AuthRequest, @UploadedFile() photo: Express.Multer.File) {
-    console.log("updatePhoto req", req.user);
     const userId = req.user.id;
     if (!userId) {
       throw new HttpException("User not found", HttpStatus.NOT_FOUND);
     }
 
-    sharp(photo.buffer)
-      .resize(200, 200)
-      .webp({ quality: 100 })
-      .toFile(`/Users/user/Desktop/my/loyal/server/static/${userId}.webp`, async (err) => {
-        if (err) {
-          throw new HttpException("Error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    const dirName = `${this.configService.get("staticPath")}/users`;
+    if (!fs.existsSync(dirName)) {
+      mkdirp.sync(dirName);
+    }
 
-        await this.userService.updateUserById(userId, { photo: `${userId}.webp` });
-        return { data: "success" };
-      });
+    try {
+      const photoId = uuidv4();
+      const photoFilename = `${userId}_${photoId}.webp`;
+
+      if (photo.originalname !== "null") {
+        fs.unlinkSync(`${dirName}/${photo.originalname}`);
+      }
+
+      await sharp(photo.buffer)
+        .resize(200, 200)
+        .webp({ quality: 100 })
+        .toFile(`${dirName}/${photoFilename}`);
+
+      await this.userService.updateUserById(userId, { photo: photoFilename });
+      return { data: "success" };
+    } catch (e) {
+      throw new HttpException("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

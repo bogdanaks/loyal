@@ -15,7 +15,7 @@ export const UserRow = ({ user }: Props) => {
     <View style={styles.container}>
       <Image
         style={styles.image}
-        source={`${config.apiDomain}/static/${user.photo}`}
+        source={`${config.apiDomain}/static/users/${user.photo}`}
         contentFit="cover"
         transition={100}
       />
